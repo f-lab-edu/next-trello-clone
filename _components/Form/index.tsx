@@ -2,9 +2,9 @@
 
 //import
 import { useForm, SubmitHandler } from "react-hook-form"; // 폼 생성을 위한 import
-import { TextField, Button } from "@mui/material"; // MUI 라이브러리
-
-// StyleSheet
+import { TextField, Button, CircularProgress, Alert } from "@mui/material"; // MUI 라이브러리
+import { useMutation } from "react-query";
+import { loginUser } from "../../utils/loginUser";
 
 // Form에 입력된 데이터를 받을 Inputs 인터페이스 지정
 interface Inputs {
@@ -21,25 +21,10 @@ const FormComponent = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      const response = await fetch("/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+  const loginMutation = useMutation(loginUser);
 
-      if (!response.ok) {
-        throw new Error("Login failed");
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    loginMutation.mutate(data);
   };
 
   console.log(watch("id")); // watch를 통해 "example"에 데이터가 전달되는지 체크
@@ -72,9 +57,22 @@ const FormComponent = () => {
       />
 
       {/* MUI 버튼 사용 */}
-      <Button type="submit" variant="contained" color="primary">
-        Submit
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={loginMutation.isLoading}
+      >
+        {loginMutation.isLoading ? <CircularProgress size={24} /> : "Submit"}
       </Button>
+
+      {loginMutation.isError && (
+        <Alert severity="error">An error occurred</Alert>
+      )}
+
+      {loginMutation.isSuccess && (
+        <Alert severity="success">Login successful!</Alert>
+      )}
     </form>
   );
 };
