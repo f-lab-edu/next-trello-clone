@@ -21,7 +21,11 @@ const FormComponent = () => {
     formState: { errors },
   } = useForm<Inputs>();
 
-  const loginMutation = useMutation(loginUser);
+  const loginMutation = useMutation(loginUser, {
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  }); // POST API일 경우 useMutation
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     loginMutation.mutate(data);
