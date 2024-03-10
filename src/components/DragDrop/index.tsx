@@ -5,6 +5,8 @@ import { Card } from "@mui/material";
 import { useDragStore } from "@/stores/useDragStore";
 import AddList from "./subComponents/AddList";
 import AddTodo from "./subComponents/AddTodo";
+import { useMutation } from "react-query";
+import { todoList } from "@/utils/todoList";
 
 const DragDrop = () => {
   const { todos, lists, setTodos, setLists } = useDragStore();
@@ -13,6 +15,19 @@ const DragDrop = () => {
   const [draggingCardId, setDraggingCardId] = useState<number | null>(null);
   const [dragOverCardId, setDragOverCardId] = useState<number | null>(null);
 
+  const initialMutation = useMutation(todoList, {
+    onSuccess: (data) => {
+      setTodos(data.todos);
+      setLists(data.lists);
+      console.log(data);
+    },
+  });
+
+  useEffect(() => {
+    initialMutation.mutate();
+  }, []);
+
+  // Todo 리스트 요소 컨트롤
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: number) => {
     e.stopPropagation();
     setDraggingItemId(id);
@@ -52,7 +67,7 @@ const DragDrop = () => {
     setDragOverItemId(null);
   };
 
-  //card
+  // Card Todo List 드레그 앤 드롭 컨트롤
   const handleDragCardStart = (
     e: React.DragEvent<HTMLDivElement>,
     id: number,

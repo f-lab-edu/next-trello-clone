@@ -1,19 +1,14 @@
 // react-query를 위한 login API
-const loginUser = async (data: { id: string; password: string }) => {
-  const response = await fetch("/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+import axios from "axios";
 
-  if (!response.ok) {
+const loginUser = async (data: { id: string; password: string }) => {
+  try {
+    const response = await axios.post("/login", data);
+
+    return response.data;
+  } catch (error) {
     throw new Error("Login failed");
   }
-
-  const responseData = await response.json();
-  return responseData;
 };
 
 export { loginUser };

@@ -1,7 +1,10 @@
 import * as React from "react";
+import { useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
+import { debounce } from "lodash";
+import { useDragStore } from "@/stores/useDragStore";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -45,16 +48,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+const SearchAppBar = () => {
+  const { filterTodo } = useDragStore();
+  const [inputValue, setInputValue] = React.useState("");
+
+  const debouncedSearch = React.useCallback(
+    debounce((nextValue) => {
+      console.log("value", nextValue);
+      filterTodo(nextValue);
+
+      // initialMutation.mutate(nextValue);
+    }, 1000),
+    [], // Will be created only once initially
+  );
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = event.target.value;
+    setInputValue(nextValue);
+    debouncedSearch(nextValue);
+  };
+
+  // useEffect(() => {debouncedSearch;}, [inputValue]);
+
   return (
     <Search>
       <SearchIconWrapper>
         <SearchIcon />
       </SearchIconWrapper>
       <StyledInputBase
-        placeholder="Search…"
+        placeholder="Filter"
         inputProps={{ "aria-label": "search" }}
+        value={inputValue}
+        onChange={handleInputChange}
       />
     </Search>
   );
-}
+};
+
+export default SearchAppBar;
