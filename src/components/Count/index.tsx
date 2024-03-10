@@ -2,9 +2,9 @@
 
 // zustand Store 활용 컴포넌트
 import React from "react";
-import { useStore } from "../../_store";
+import { useStore } from "@/stores";
 
-const CountComponent = () => {
+const Count = () => {
   // Zustand store 사용, 증가 함수만 사용
   const { count, increase } = useStore();
 
@@ -16,4 +16,4 @@ const CountComponent = () => {
   );
 };
 
-export default CountComponent;
+export default Count;
