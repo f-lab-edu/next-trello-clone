@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-import { debounce } from "lodash";
 import { useDragStore } from "@/stores/useDragStore";
 
 const Search = styled("div")(({ theme }) => ({
@@ -48,18 +47,27 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const debounce = (func: (...args: string[]) => void, waitFor: number) => {
+  let timeoutId: NodeJS.Timeout | null = null;
+
+  return (...args: Parameters<(...args: string[]) => void>): void => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => func(...args), waitFor);
+  };
+};
+
 const SearchAppBar = () => {
   const { filterTodo } = useDragStore();
   const [inputValue, setInputValue] = React.useState("");
 
   const debouncedSearch = React.useCallback(
     debounce((nextValue) => {
-      console.log("value", nextValue);
       filterTodo(nextValue);
-
-      // initialMutation.mutate(nextValue);
     }, 1000),
-    [], // Will be created only once initially
+    [],
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,8 +75,6 @@ const SearchAppBar = () => {
     setInputValue(nextValue);
     debouncedSearch(nextValue);
   };
-
-  // useEffect(() => {debouncedSearch;}, [inputValue]);
 
   return (
     <Search>

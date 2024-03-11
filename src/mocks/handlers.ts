@@ -5,7 +5,7 @@ const initialLists = [
     id: 1,
     listSeq: 1, // todo 리스트 순서
     listName: "first", //리스트 이름
-    todoList: 1, //
+    todoList: 1, // List ID
   },
   {
     id: 2,
@@ -37,7 +37,8 @@ const initialTodos = [
     list: 2,
   },
 ];
-// component/export
+
+// component
 export const handlers = [
   rest.post("http://localhost:3000/login", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: "Login successful" }));

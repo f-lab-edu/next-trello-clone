@@ -133,8 +133,8 @@ const DragDrop = () => {
           draggable
           onDragStart={(e) => handleDragCardStart(e, list.id)}
           onDragOver={(e) => handleDragCardOver(e, list.id)}
-          onDragEnd={handleDragCardEnd}
           onDrop={(e) => handleDropOnCard(e, list.id)}
+          onDragEnd={handleDragCardEnd}
           style={{
             minHeight: "50px",
             minWidth: "20vw",
