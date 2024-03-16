@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Card } from "@mui/material";
 import { useDragStore } from "@/stores/useDragStore";
-import AddList from "./subComponents/AddList";
-import AddTodo from "./subComponents/AddTodo";
+import AddList from "./AddList";
+import AddTodo from "./AddTodo";
 import { useMutation } from "react-query";
 import { todoList } from "@/utils/todoList";
 
