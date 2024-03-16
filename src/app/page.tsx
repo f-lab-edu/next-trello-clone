@@ -1,18 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import DragDrop from "@/app/_DragDrop";
+import { useEffect } from "react";
+import DragDrop from "@/components/DragDrop";
 import { useDragStore } from "@/stores/useDragStore";
-import { todoList } from "@/api/todoList";
-import { useInfiniteQuery } from "react-query";
-import { useInView } from "react-intersection-observer";
 
-// component
+import { todoList } from "@/utils/todoList";
+import { useMutation } from "react-query";
+
 const Home = () => {
+  const { todos, lists, setTodos, setLists } = useDragStore();
+  const initialMutation = useMutation(todoList, {
+    onSuccess: (data) => {
+      setTodos(data.todos);
+      setLists(data.lists);
+      console.log(data);
+    },
+  });
+  useEffect(() => {
+    initialMutation.mutate();
+  }, []);
+
   return (
     <div>
       {/* 외부 컴포넌트 적용 */}
-      <DragDrop />
+      <DragDrop
+        todos={todos}
+        lists={lists}
+        setTodos={setTodos}
+        setLists={setLists}
+      />
     </div>
   );
 };
