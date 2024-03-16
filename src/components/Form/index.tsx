@@ -4,7 +4,7 @@
 import { useForm, SubmitHandler } from "react-hook-form"; // 폼 생성을 위한 import
 import { TextField, Button, CircularProgress, Alert } from "@mui/material"; // MUI 라이브러리
 import { useMutation } from "react-query";
-import { loginUser } from "../../utils/loginUser";
+import { loginUser } from "@/utils/loginUser";
 
 // Form에 입력된 데이터를 받을 Inputs 인터페이스 지정
 interface Inputs {
@@ -13,7 +13,7 @@ interface Inputs {
 }
 
 // Component 생성 : React-Hook-Form 사용 컴포넌트
-const FormComponent = () => {
+const Form = () => {
   const {
     register,
     handleSubmit,
@@ -82,4 +82,4 @@ const FormComponent = () => {
 };
 
 // Export : 단일 컴포넌트 export
-export default FormComponent;
+export default Form;
