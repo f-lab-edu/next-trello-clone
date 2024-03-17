@@ -1,18 +1,30 @@
+/** @jsxImportSource @emotion/react */
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { css } from "@emotion/react";
 import { useDragStore } from "@/stores/useDragStore"; // 위에서 생성한 Zustand 스토어를 임포트합니다.
+import { useAddListMutation } from "@/api/todoList";
+
+const StyledDiv = css`
+  display: inline-block;
+  flex-shrink: 0;
+  min-width: 20vw;
+  margin: 8px;
+`;
 
 const AddList = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [listName, setListName] = useState("");
   const { addList } = useDragStore();
+  const addListMutation = useAddListMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);
   };
 
   const handleConfirmClick = () => {
+    addListMutation.mutate({ title: listName });
     addList(listName);
     setIsAdding(false);
   };
@@ -23,14 +35,7 @@ const AddList = () => {
 
   if (isAdding) {
     return (
-      <div
-        style={{
-          display: "inline-block",
-          flexShrink: 0,
-          minWidth: "20vw",
-          margin: "8px",
-        }}
-      >
+      <div css={StyledDiv}>
         <TextField
           sx={{
             flexShrink: 0,

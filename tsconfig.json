@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
     // "baseUrl": "./src",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "preserve",
+    "jsxImportSource": "@emotion/react",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +17,6 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
     "incremental": true,
     "plugins": [
       {
@@ -19,7 +24,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     }
   },
   "include": [
@@ -28,5 +35,7 @@
     ".next/types/**/*.ts",
     "src/stores/index.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

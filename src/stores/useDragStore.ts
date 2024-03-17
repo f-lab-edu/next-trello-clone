@@ -9,8 +9,9 @@ interface Todo {
 
 interface List {
   id: number;
-  listName: string;
-  todoList: number;
+  title: string;
+  listNum: number;
+  Seq?: number;
 }
 
 const initialLists: List[] | null = [];
@@ -64,11 +65,10 @@ export const useDragStore = create<State>((set) => ({
 
   filterTodo: (filterValue) =>
     set((state) => {
-      const filteredTodos = state.backupTodos.filter((todo: Todo) => {
-        console.log("todotext", todo.text);
-        return todo.text.includes(filterValue);
+      const filteredTodos = state.backupTodos.filter((todo: DataValues) => {
+        return todo.title.includes(filterValue);
       });
-      console.log("filteredTodos", filteredTodos);
+
       return {
         todos: filteredTodos,
       };
