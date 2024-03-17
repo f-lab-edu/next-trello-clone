@@ -141,11 +141,6 @@ const DragDrop: React.FC<DragDropValues> = ({
     // console.log("drag and drop");
   };
 
-  const handleDragCardEnd = () => {
-    setDraggingCardId(null);
-    setDragOverCardId(null);
-  };
-
   return (
     <div css={StyledListDiv}>
       {lists.map((list) => (

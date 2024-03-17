@@ -3,9 +3,8 @@
 import { useEffect } from "react";
 import DragDrop from "@/components/DragDrop";
 import { useDragStore } from "@/stores/useDragStore";
-
-import { todoList } from "@/utils/todoList";
-import { useMutation } from "react-query";
+import { todoList } from "@/api/todoList";
+import { useQuery } from "react-query";
 
 const Home = () => {
   const { todos, lists, setTodos, setLists } = useDragStore();
