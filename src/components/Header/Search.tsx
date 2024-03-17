@@ -1,9 +1,9 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDragStore } from "@/stores/useDragStore";
+import debounce from "@/utils/closure";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -47,22 +47,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const debounce = (func: (...args: string[]) => void, waitFor: number) => {
-  let timeoutId: NodeJS.Timeout | null = null;
-
-  return (...args: Parameters<(...args: string[]) => void>): void => {
-    if (timeoutId !== null) {
-      clearTimeout(timeoutId);
-    }
-
-    timeoutId = setTimeout(() => func(...args), waitFor);
-  };
-};
-
 const SearchAppBar = () => {
   const { filterTodo } = useDragStore();
-  const [inputValue, setInputValue] = React.useState("");
+  const [filterValue, setFilterValue] = React.useState("");
 
+  // debounce
   const debouncedSearch = React.useCallback(
     debounce((nextValue) => {
       filterTodo(nextValue);
@@ -72,7 +61,7 @@ const SearchAppBar = () => {
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const nextValue = event.target.value;
-    setInputValue(nextValue);
+    setFilterValue(nextValue);
     debouncedSearch(nextValue);
   };
 
@@ -84,7 +73,7 @@ const SearchAppBar = () => {
       <StyledInputBase
         placeholder="Filter"
         inputProps={{ "aria-label": "search" }}
-        value={inputValue}
+        value={filterValue}
         onChange={handleInputChange}
       />
     </Search>

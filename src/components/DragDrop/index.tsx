@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+/** @jsxImportSource @emotion/react */
+import React, { useState, useEffect } from "react";
 import { Card } from "@mui/material";
+import { css } from "@emotion/react";
 import AddList from "./AddList";
 import AddTodo from "./AddTodo";
-
+import { useUpdateTodoListMutation } from "@/api/todoList";
 interface DataValues {
   id: number;
   title: string;
   listNum: number;
+  Seq?: number;
 }
 
 interface DragDropValues {
@@ -15,6 +18,21 @@ interface DragDropValues {
   setTodos: (props: DataValues[]) => void;
   setLists: (props: DataValues[]) => void;
 }
+
+const StyledTodoDiv = (draggingTodoId: number | null, id: number) => css`
+  user-select: none;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background-color: ${draggingTodoId === id ? "#555" : "#eee"};
+`;
+
+const StyledListDiv = () => css`
+  display: flex;
+  height: 90vh;
+  align-items: flex-start;
+  overflow-x: auto;
+`;
 
 const DragDrop: React.FC<DragDropValues> = ({
   todos,
@@ -26,7 +44,11 @@ const DragDrop: React.FC<DragDropValues> = ({
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
   const [dragOverListId, setDragOverListId] = useState<number | null>(null);
+  const updateTodoList = useUpdateTodoListMutation();
 
+  useEffect(() => {
+    updateTodoList.mutate({ todos, lists });
+  }, [todos, lists]);
   // Drag&Drop 동작 함수
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
@@ -107,17 +129,12 @@ const DragDrop: React.FC<DragDropValues> = ({
       setDragOverListId(null);
       setLists(newList);
     }
+    // updateTodoList.mutate({ todos, lists });
+    // console.log("drag and drop");
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "90vh",
-        alignItems: "flex-start",
-        overflowX: "auto",
-      }}
-    >
+    <div css={StyledListDiv}>
       {lists.map((list) => (
         <Card
           key={list.id}
@@ -128,7 +145,7 @@ const DragDrop: React.FC<DragDropValues> = ({
           onDragEnd={(e) =>
             handleDragEnd(e, setDraggingListId, setDragOverListId)
           }
-          style={{
+          sx={{
             minHeight: "50px",
             minWidth: "20vw",
             margin: "8px",
@@ -138,7 +155,13 @@ const DragDrop: React.FC<DragDropValues> = ({
             flexShrink: 0,
           }}
         >
-          <h2 style={{ color: "#eee" }}>{list.title}</h2>
+          <h2
+            css={css`
+              color: #eee;
+            `}
+          >
+            {list.title}
+          </h2>
           <div>
             {todos
               .filter((todo) => todo.listNum === list.listNum)
@@ -155,14 +178,7 @@ const DragDrop: React.FC<DragDropValues> = ({
                   onDragEnd={(e) =>
                     handleDragEnd(e, setDraggingTodoId, setDragOverTodoId)
                   }
-                  style={{
-                    userSelect: "none",
-                    padding: "10px",
-                    marginBottom: "10px",
-                    borderRadius: "8px",
-                    backgroundColor:
-                      draggingTodoId === todo.id ? "#555" : "#eee",
-                  }}
+                  css={StyledTodoDiv(draggingTodoId, todo.id)}
                 >
                   {todo.title}
                 </div>

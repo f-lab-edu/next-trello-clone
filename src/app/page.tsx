@@ -3,22 +3,27 @@
 import { useEffect } from "react";
 import DragDrop from "@/components/DragDrop";
 import { useDragStore } from "@/stores/useDragStore";
-
-import { todoList } from "@/utils/todoList";
-import { useMutation } from "react-query";
+import { todoList } from "@/api/todoList";
+import { useQuery } from "react-query";
 
 const Home = () => {
   const { todos, lists, setTodos, setLists } = useDragStore();
-  const initialMutation = useMutation(todoList, {
-    onSuccess: (data) => {
+  const { data, isError, isLoading } = useQuery("todos", todoList);
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
       setTodos(data.todos);
       setLists(data.lists);
-      console.log(data);
-    },
-  });
-  useEffect(() => {
-    initialMutation.mutate();
-  }, []);
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>An error has occurred</div>;
+  }
 
   return (
     <div>

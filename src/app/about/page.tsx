@@ -1,11 +1,8 @@
 /* /about 경로 페이지 컴포넌트 */
-// import
 import Count from "@/components/Count"; // Count 컴포넌트 import
 
-// style
 import styles from "./page.module.css";
 
-// component 생성
 const About = () => {
   return (
     <div>
@@ -17,5 +14,4 @@ const About = () => {
   );
 };
 
-// export
 export default About;

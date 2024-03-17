@@ -1,25 +1,43 @@
 "use client";
-
+/** @jsxImportSource @emotion/react */
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import { setupWorker } from "msw";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { handlers, todoHandlers } from "@/mocks/handlers";
-
+import {
+  handlers,
+  todoHandlers,
+  addTodo,
+  addList,
+  updateTodoList,
+} from "@/mocks/handlers";
+import { css } from "@emotion/react";
 // react-query 세팅
 const queryClient = new QueryClient();
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   // msw mocking
   useEffect(() => {
-    const worker = setupWorker(...handlers, ...todoHandlers);
-    worker.start();
+    if (typeof window !== "undefined") {
+      const worker = setupWorker(
+        ...handlers,
+        ...todoHandlers,
+        ...addTodo,
+        ...addList,
+        ...updateTodoList,
+      );
+      worker.start();
+    }
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <html lang="en">
-        <body style={{ margin: "0px" }}>
+        <body
+          css={css`
+            margin: 0px;
+          `}
+        >
           <Header />
           <main>{children}</main>
         </body>

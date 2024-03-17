@@ -5,6 +5,7 @@ interface DataValues {
   id: number;
   title: string;
   listNum: number;
+  Seq?: number;
 }
 
 const initialLists: DataValues[] | null = [];
@@ -59,10 +60,9 @@ export const useDragStore = create<State>((set) => ({
   filterTodo: (filterValue) =>
     set((state) => {
       const filteredTodos = state.backupTodos.filter((todo: DataValues) => {
-        console.log("todotext", todo.title);
         return todo.title.includes(filterValue);
       });
-      console.log("filteredTodos", filteredTodos);
+
       return {
         todos: filteredTodos,
       };

@@ -3,7 +3,7 @@
 import { useForm, SubmitHandler } from "react-hook-form"; // 폼 생성을 위한 import
 import { TextField, Button, CircularProgress, Alert } from "@mui/material"; // MUI 라이브러리
 import { useMutation } from "react-query";
-import { loginUser } from "@/utils/loginUser";
+import { loginUser } from "@/api/loginUser";
 
 interface LoginFormValues {
   id: string;
@@ -27,8 +27,6 @@ const Form = () => {
   const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
     loginMutation.mutate(data);
   };
-
-  console.log(watch("id")); // watch를 통해 "example"에 데이터가 전달되는지 체크
 
   return (
     /* "handleSubmit"이 onSubmit 동작 되기 전에 inputs을 식별 */
