@@ -18,7 +18,9 @@ interface State {
   backupTodos: DataValues[];
   backupLists: DataValues[];
   setTodos: (props: DataValues[]) => void;
-  setLists: (props: DataValues[]) => void;
+  setLists: (
+    props: DataValues[],
+  ) => void | React.Dispatch<React.SetStateAction<DataValues[]>>;
   addList: (name: string) => void;
   addTodo: (title: string, listNum: number) => void;
   filterTodo: (filterValue: string) => void;
@@ -35,7 +37,7 @@ export const useDragStore = create<State>((set) => ({
 
   addList: (name) =>
     set((state) => {
-      const newId = state.lists.length + 1;
+      const newId = state.lists.length ? state.lists.length + 1 : 1;
       return {
         lists: [...state.lists, { id: newId, title: name, listNum: newId }],
         backupLists: [
@@ -47,7 +49,7 @@ export const useDragStore = create<State>((set) => ({
 
   addTodo: (title, listNum) =>
     set((state) => {
-      const newId = state.todos.length + 1;
+      const newId = state.todos.length ? state.todos.length + 1 : 1;
       return {
         todos: [...state.todos, { id: newId, title: title, listNum: listNum }],
         backupTodos: [

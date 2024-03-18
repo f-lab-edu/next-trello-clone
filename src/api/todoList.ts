@@ -9,6 +9,9 @@ interface DataValues {
   Seq?: number;
 }
 
+interface TodoListValue {
+  pageParam: number;
+}
 interface AddTodoProps {
   title: string;
   listNum?: number;
@@ -19,8 +22,8 @@ interface UpdateTodoListProps {
   lists: DataValues[];
 }
 
-const todoList = async () => {
-  const response = await axios.get("/todoLists");
+const todoList = async ({ pageParam }: TodoListValue) => {
+  const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
   return response.data;
 };
 
@@ -66,18 +69,22 @@ export const useAddListMutation = () => {
 export const useUpdateTodoListMutation = () => {
   const AddListMutation = useMutation(
     async ({ todos, lists }: UpdateTodoListProps) => {
-      for (let index = 0; index < lists.length; index++) {
-        lists[index] = {
-          ...lists[index],
-          Seq: index,
-        };
+      if (lists.length) {
+        for (let index = 0; index < lists.length; index++) {
+          lists[index] = {
+            ...lists[index],
+            Seq: index,
+          };
+        }
       }
 
-      for (let index = 0; index < todos.length; index++) {
-        todos[index] = {
-          ...todos[index],
-          Seq: index,
-        };
+      if (todos.length) {
+        for (let index = 0; index < todos.length; index++) {
+          todos[index] = {
+            ...todos[index],
+            Seq: index,
+          };
+        }
       }
 
       const response = await axios.post("/updateTodoList", {

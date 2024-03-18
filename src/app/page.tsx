@@ -1,21 +1,42 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DragDrop from "@/components/DragDrop";
 import { useDragStore } from "@/stores/useDragStore";
 import { todoList } from "@/api/todoList";
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
+import { useInView } from "react-intersection-observer";
 
 const Home = () => {
   const { todos, lists, setTodos, setLists } = useDragStore();
-  const { data, isError, isLoading } = useQuery("todos", todoList);
+  const [ref, inView] = useInView();
+
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
+    useInfiniteQuery(["page"], ({ pageParam = 1 }) => todoList({ pageParam }), {
+      getNextPageParam: (lastPage, allPosts) => {
+        return lastPage.page !== allPosts[0].totalPage
+          ? lastPage.page + 1
+          : undefined;
+      },
+      enabled: false,
+    });
 
   useEffect(() => {
-    if (!isLoading && !isError && data) {
-      setTodos(data.todos);
-      setLists(data.lists);
+    if (inView) {
+      // useInfiniteQuery enabled:false 해제
+      refetch();
+      if (hasNextPage) {
+        fetchNextPage();
+        if (data) {
+          const allTodos = data.pages.flatMap((page) => page.todos);
+          setTodos(allTodos);
+
+          const allLists = data.pages.flatMap((page) => page.lists);
+          setLists(allLists);
+        }
+      }
     }
-  }, [data]);
+  }, [inView, hasNextPage, fetchNextPage]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -33,7 +54,9 @@ const Home = () => {
         lists={lists}
         setTodos={setTodos}
         setLists={setLists}
-      />
+      >
+        <div ref={ref}></div>
+      </DragDrop>
     </div>
   );
 };

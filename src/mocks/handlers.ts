@@ -2,44 +2,98 @@
 import { rest } from "msw"; // msw 1.0v 기준
 import db from "@/db/db.model";
 const initialLists = [
-  // {
-  //   id: 1, //Unique Key
-  //   title: "first", //리스트 이름
-  //   listNum: 1, // List ID
-  //   Seq: 0,
-  // },
-  // {
-  //   id: 2,
-  //   title: "second",
-  //   listNum: 2,
-  //   Seq: 1,
-  // },
-  // {
-  //   id: 3,
-  //   title: "third",
-  //   listNum: 3,
-  //   Seq: 2,
-  // },
+  {
+    id: 1, //Unique Key
+    title: "first", //리스트 이름
+    listNum: 1, // List ID
+    Seq: 0,
+  },
+  {
+    id: 2,
+    title: "second",
+    listNum: 2,
+    Seq: 1,
+  },
+  {
+    id: 3,
+    title: "third",
+    listNum: 3,
+    Seq: 2,
+  },
+  {
+    id: 4,
+    title: "fourth",
+    listNum: 4,
+    Seq: 3,
+  },
+  {
+    id: 5,
+    title: "fifth",
+    listNum: 5,
+    Seq: 4,
+  },
+  {
+    id: 6,
+    title: "sixth",
+    listNum: 6,
+    Seq: 5,
+  },
+  {
+    id: 7,
+    title: "seventh",
+    listNum: 7,
+    Seq: 6,
+  },
+  {
+    id: 8,
+    title: "eighth",
+    listNum: 8,
+    Seq: 7,
+  },
+  {
+    id: 9,
+    title: "nineth",
+    listNum: 9,
+    Seq: 8,
+  },
+  {
+    id: 10,
+    title: "Tenth",
+    listNum: 10,
+    Seq: 9,
+  },
+  {
+    id: 11,
+    title: "Eleventh",
+    listNum: 11,
+    Seq: 10,
+  },
+  {
+    id: 12,
+    title: "Twelveth",
+    listNum: 12,
+    Seq: 11,
+  },
 ];
 const initialTodos = [
-  // {
-  //   id: 1,
-  //   title: "Learn React",
-  //   listNum: 1,
-  //   Seq: 0,
-  // },
-  // {
-  //   id: 2,
-  //   title: "Learn Node.js",
-  //   listNum: 1,
-  //   Seq: 1,
-  // },
-  // {
-  //   id: 3,
-  //   title: "Learn React33",
-  //   listNum: 2,
-  //   Seq: 2,
-  // },
+  {
+    id: 1,
+    title: "Learn React",
+    listNum: 1,
+    Seq: 0,
+  },
+  {
+    id: 2,
+    title: "Learn Node.js",
+    listNum: 1,
+    Seq: 1,
+  },
+  {
+    id: 3,
+    title: "Learn React33",
+    listNum: 2,
+    Seq: 2,
+  },
 ];
 
 // db.lists.bulkPut(initialLists);
@@ -65,18 +119,30 @@ export const handlers = [
 
 export const todoHandlers = [
   rest.get("http://localhost:3000/todoLists", async (req, res, ctx) => {
-    const todos = await db.todos.orderBy("Seq").toArray();
-    const lists = await db.lists.orderBy("Seq").toArray();
+    const page = Number(req.url.searchParams.get("page")) || 1;
+    const limit = Number(req.url.searchParams.get("limit")) || 5;
+    const todos = await db.todos
+      .orderBy("Seq")
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .toArray();
+    const lists = await db.lists
+      .orderBy("Seq")
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .toArray();
+
     return res(
       ctx.status(200),
       ctx.json({
         todos: todos,
         lists: lists,
+        page: Number(page),
+        totalPage: 4,
       }),
     );
   }),
 ];
-
 interface AddTodoList {
   title: string;
   listNum: number;
@@ -116,25 +182,18 @@ export const updateTodoList = [
     "http://localhost:3000/updateTodoList",
     async (req, res, ctx) => {
       let { todos, lists } = req.body;
-      for (let index = 0; index < lists.length; index++) {
-        lists[index] = {
-          ...lists[index],
-          Seq: index,
-        };
+      if (lists.length) {
+        for (let index = 0; index < lists.length; index++) {
+          await db.lists.update(lists[index].id, { Seq: index });
+        }
       }
 
-      for (let index = 0; index < todos.length; index++) {
-        todos[index] = {
-          ...todos[index],
-          Seq: index,
-        };
+      if (todos.length) {
+        for (let index = 0; index < todos.length; index++) {
+          await db.todos.update(todos[index].id, { Seq: index });
+        }
       }
 
-      await db.lists.clear();
-      await db.todos.clear();
-
-      await db.lists.bulkPut(lists);
-      await db.todos.bulkPut(todos);
       const listsUpdate = await db.lists.orderBy("Seq").toArray();
       const todosUpdate = await db.todos.orderBy("Seq").toArray();
       return res(

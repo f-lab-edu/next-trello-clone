@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { Card } from "@mui/material";
 import { css } from "@emotion/react";
 import AddList from "./AddList";
 import AddTodo from "./AddTodo";
 import { useUpdateTodoListMutation } from "@/api/todoList";
+
 interface DataValues {
   id: number;
   title: string;
@@ -17,6 +18,7 @@ interface DragDropValues {
   lists: DataValues[];
   setTodos: (props: DataValues[]) => void;
   setLists: (props: DataValues[]) => void;
+  children?: ReactNode;
 }
 
 const StyledTodoDiv = (draggingTodoId: number | null, id: number) => css`
@@ -39,6 +41,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   lists,
   setTodos,
   setLists,
+  children,
 }) => {
   const [draggingTodoId, setDraggingTodoId] = useState<number | null>(null);
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
@@ -49,6 +52,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   useEffect(() => {
     updateTodoList.mutate({ todos, lists });
   }, [todos, lists]);
+
   // Drag&Drop 동작 함수
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
@@ -129,64 +133,65 @@ const DragDrop: React.FC<DragDropValues> = ({
       setDragOverListId(null);
       setLists(newList);
     }
-    // updateTodoList.mutate({ todos, lists });
-    // console.log("drag and drop");
   };
 
   return (
     <div css={StyledListDiv}>
-      {lists.map((list) => (
-        <Card
-          key={list.id}
-          draggable
-          onDragStart={(e) => handleDragStart(e, list.id, setDraggingListId)}
-          onDragOver={(e) => handleDragOver(e, list.id, setDragOverListId)}
-          onDrop={(e) => handleDropOnList(e, list.id)}
-          onDragEnd={(e) =>
-            handleDragEnd(e, setDraggingListId, setDragOverListId)
-          }
-          sx={{
-            minHeight: "50px",
-            minWidth: "20vw",
-            margin: "8px",
-            padding: "10px",
-            backgroundColor: "#333",
-            display: "inline-block",
-            flexShrink: 0,
-          }}
-        >
-          <h2
-            css={css`
-              color: #eee;
-            `}
+      {lists &&
+        lists.map((list) => (
+          <Card
+            key={list.id}
+            draggable
+            onDragStart={(e) => handleDragStart(e, list.id, setDraggingListId)}
+            onDragOver={(e) => handleDragOver(e, list.id, setDragOverListId)}
+            onDrop={(e) => handleDropOnList(e, list.id)}
+            onDragEnd={(e) =>
+              handleDragEnd(e, setDraggingListId, setDragOverListId)
+            }
+            sx={{
+              minHeight: "50px",
+              minWidth: "20vw",
+              margin: "8px",
+              padding: "10px",
+              backgroundColor: "#333",
+              display: "inline-block",
+              flexShrink: 0,
+            }}
           >
-            {list.title}
-          </h2>
-          <div>
-            {todos
-              .filter((todo) => todo.listNum === list.listNum)
-              .map((todo, index) => (
-                <div
-                  key={todo.id}
-                  draggable
-                  onDragStart={(e) =>
-                    handleDragStart(e, todo.id, setDraggingTodoId)
-                  }
-                  onDragOver={(e) =>
-                    handleDragOver(e, todo.id, setDragOverTodoId)
-                  }
-                  onDragEnd={(e) =>
-                    handleDragEnd(e, setDraggingTodoId, setDragOverTodoId)
-                  }
-                  css={StyledTodoDiv(draggingTodoId, todo.id)}
-                >
-                  {todo.title}
-                </div>
-              ))}
-            <AddTodo listNum={list.listNum} />
-          </div>
-        </Card>
-      ))}
+            <h2
+              css={css`
+                color: #eee;
+              `}
+            >
+              {list.title}
+            </h2>
+            <div>
+              {todos &&
+                todos
+                  .filter((todo) => todo.listNum === list.listNum)
+                  .map((todo, index) => (
+                    <div
+                      key={todo.id}
+                      draggable
+                      onDragStart={(e) =>
+                        handleDragStart(e, todo.id, setDraggingTodoId)
+                      }
+                      onDragOver={(e) =>
+                        handleDragOver(e, todo.id, setDragOverTodoId)
+                      }
+                      onDragEnd={(e) =>
+                        handleDragEnd(e, setDraggingTodoId, setDragOverTodoId)
+                      }
+                      css={StyledTodoDiv(draggingTodoId, todo.id)}
+                    >
+                      {todo.title}
+                    </div>
+                  ))}
+              <AddTodo listNum={list.listNum} />
+            </div>
+          </Card>
+        ))}
+      {children}
       <AddList />
     </div>
   );
