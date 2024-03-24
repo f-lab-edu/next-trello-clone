@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import DragDrop from "@/components/DragDrop";
+import DragDrop from "@/app/_DragDrop";
 import { useDragStore } from "@/stores/useDragStore";
 import { todoList } from "@/api/todoList";
 import { useInfiniteQuery } from "react-query";
