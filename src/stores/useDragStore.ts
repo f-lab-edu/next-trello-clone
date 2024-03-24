@@ -18,12 +18,14 @@ const initialTodos: Todo[] | null = [];
 
 // 타입 지정
 interface State {
-  todos: Todo[];
-  lists: List[];
-  backupTodos: Todo[];
-  backupLists: List[];
-  setTodos: (props: Todo[]) => void;
-  setLists: (props: List[]) => void;
+  todos: DataValues[];
+  lists: DataValues[];
+  backupTodos: DataValues[];
+  backupLists: DataValues[];
+  setTodos: (props: DataValues[]) => void;
+  setLists: (
+    props: DataValues[],
+  ) => void | React.Dispatch<React.SetStateAction<DataValues[]>>;
   addList: (name: string) => void;
   addTodo: (title: string, listNum: number) => void;
   filterTodo: (filterValue: string) => void;
@@ -40,7 +42,7 @@ export const useDragStore = create<State>((set) => ({
 
   addList: (name) =>
     set((state) => {
-      const newId = state.lists.length + 1;
+      const newId = state.lists.length ? state.lists.length + 1 : 1;
       return {
         lists: [...state.lists, { id: newId, listName: name, todoList: newId }],
         backupLists: [
@@ -52,7 +54,7 @@ export const useDragStore = create<State>((set) => ({
 
   addTodo: (title, listNum) =>
     set((state) => {
-      const newId = state.todos.length + 1;
+      const newId = state.todos.length ? state.todos.length + 1 : 1;
       return {
         todos: [...state.todos, { id: newId, text: title, list: listNum }],
         backupTodos: [
