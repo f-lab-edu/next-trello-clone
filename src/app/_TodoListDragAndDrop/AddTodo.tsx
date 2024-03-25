@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
-import { css } from "@emotion/react";
 import TextField from "@mui/material/TextField";
 import { useCreateTodoMutation } from "@/api/todoList";
+import styled from "@emotion/styled";
 
 interface AddTodoProps {
   listNum: number;
 }
 
-const StyledDiv = css`
+const Container = styled("div")`
   display: inline-block,
   flex-shrink: 0,
   min-width: 20vw,
@@ -36,7 +36,7 @@ const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
 
   if (isAdding) {
     return (
-      <div css={StyledDiv}>
+      <Container>
         <TextField
           sx={{
             flexShrink: 0,
@@ -60,7 +60,7 @@ const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
             Cancel
           </Button>
         </div>
-      </div>
+      </Container>
     );
   }
 

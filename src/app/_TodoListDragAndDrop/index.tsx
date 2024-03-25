@@ -1,7 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect, ReactNode } from "react";
 import { Card } from "@mui/material";
-import { css } from "@emotion/react";
+import Typography from "@mui/material/Typography";
+import styled from "@emotion/styled";
+
 import AddList from "./AddList";
 import AddTodo from "./AddTodo";
 import { useEditTodoListMutation } from "@/api/todoList";
@@ -21,15 +23,21 @@ interface DragDropValues {
   children?: ReactNode;
 }
 
-const StyledTodoDiv = (draggingTodoId: number | null, id: number) => css`
+interface TodoContainerProps {
+  draggingTodoId: number | null;
+  todoId: number;
+}
+
+const TodoContainer = styled("div")<TodoContainerProps>`
   user-select: none;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 8px;
-  background-color: ${draggingTodoId === id ? "#555" : "#eee"};
+  background-color: ${(props) =>
+    props.draggingTodoId === props.todoId ? "#555" : "#eee"};
 `;
 
-const StyledListDiv = () => css`
+const ListContainer = styled("div")`
   display: flex;
   height: 90vh;
   align-items: flex-start;
@@ -136,7 +144,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   };
 
   return (
-    <div css={StyledListDiv}>
+    <ListContainer>
       {lists &&
         lists.map((list) => (
           <Card
@@ -158,19 +166,16 @@ const DragDrop: React.FC<DragDropValues> = ({
               flexShrink: 0,
             }}
           >
-            <h2
-              css={css`
-                color: #eee;
-              `}
-            >
+            <Typography variant="h6" sx={{ color: " #eee" }}>
               {list.title}
-            </h2>
+            </Typography>
+
             <div>
               {todos &&
                 todos
                   .filter((todo) => todo.listNum === list.listNum)
                   .map((todo, _index) => (
-                    <div
+                    <TodoContainer
                       key={todo.id}
                       draggable
                       onDragStart={(e) =>
@@ -182,10 +187,11 @@ const DragDrop: React.FC<DragDropValues> = ({
                       onDragEnd={(e) =>
                         handleDragEnd(e, setDraggingTodoId, setDragOverTodoId)
                       }
-                      css={StyledTodoDiv(draggingTodoId, todo.id)}
+                      draggingTodoId={draggingTodoId}
+                      todoId={todo.id}
                     >
                       {todo.title}
-                    </div>
+                    </TodoContainer>
                   ))}
               <AddTodo listNum={list.listNum} />
             </div>
@@ -193,7 +199,7 @@ const DragDrop: React.FC<DragDropValues> = ({
         ))}
       {children}
       <AddList />
-    </div>
+    </ListContainer>
   );
 };
 

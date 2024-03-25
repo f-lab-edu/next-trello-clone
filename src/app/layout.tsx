@@ -5,7 +5,12 @@ import Header from "@/components/Header";
 import { setupWorker } from "msw";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { handlers } from "@/mocks/handlers";
-import { css } from "@emotion/react";
+import styled from "@emotion/styled";
+
+// styled
+const Body = styled("body")`
+  margin: 0px;
+`;
 // react-query 세팅
 const queryClient = new QueryClient();
 
@@ -21,14 +26,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <html lang="en">
-        <body
-          css={css`
-            margin: 0px;
-          `}
-        >
+        <Body>
           <Header />
           <main>{children}</main>
-        </body>
+        </Body>
       </html>
     </QueryClientProvider>
   );
