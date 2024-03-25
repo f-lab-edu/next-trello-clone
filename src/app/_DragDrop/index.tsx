@@ -169,7 +169,7 @@ const DragDrop: React.FC<DragDropValues> = ({
               {todos &&
                 todos
                   .filter((todo) => todo.listNum === list.listNum)
-                  .map((todo, index) => (
+                  .map((todo, _index) => (
                     <div
                       key={todo.id}
                       draggable

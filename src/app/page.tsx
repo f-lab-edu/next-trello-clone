@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import DragDrop from "@/app/_DragDrop";
 import { useDragStore } from "@/stores/useDragStore";
 import { todoList } from "@/api/todoList";
