@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { css } from "@emotion/react";
 import { useDragStore } from "@/stores/useDragStore"; // 위에서 생성한 Zustand 스토어를 임포트합니다.
-import { useAddListMutation } from "@/api/todoList";
+import { useCreateListMutation } from "@/api/todoList";
 
 const StyledDiv = css`
   display: inline-block;
@@ -17,7 +17,7 @@ const AddList = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [listName, setListName] = useState("");
   const { addList } = useDragStore();
-  const addListMutation = useAddListMutation();
+  const addListMutation = useCreateListMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);

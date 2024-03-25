@@ -3,7 +3,7 @@ import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
 import { css } from "@emotion/react";
 import TextField from "@mui/material/TextField";
-import { useAddTodoMutation } from "@/api/todoList";
+import { useCreateTodoMutation } from "@/api/todoList";
 
 interface AddTodoProps {
   listNum: number;
@@ -18,7 +18,7 @@ const StyledDiv = css`
 const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [todoName, setTodoName] = useState("");
-  const addTodoMutation = useAddTodoMutation();
+  const addTodoMutation = useCreateTodoMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);

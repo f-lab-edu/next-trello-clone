@@ -4,7 +4,7 @@ import { Card } from "@mui/material";
 import { css } from "@emotion/react";
 import AddList from "./AddList";
 import AddTodo from "./AddTodo";
-import { useUpdateTodoListMutation } from "@/api/todoList";
+import { useEditTodoListMutation } from "@/api/todoList";
 
 interface DataValues {
   id: number;
@@ -47,7 +47,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
   const [dragOverListId, setDragOverListId] = useState<number | null>(null);
-  const updateTodoList = useUpdateTodoListMutation();
+  const updateTodoList = useEditTodoListMutation();
 
   useEffect(() => {
     updateTodoList.mutate({ todos, lists });
