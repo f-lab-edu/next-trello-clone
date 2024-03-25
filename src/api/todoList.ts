@@ -28,7 +28,7 @@ const todoList = async ({ pageParam }: TodoListValue) => {
 };
 
 const todoFilter = async (nextValue: string) => {
-  const response = await axios.post("/todoFilter", { filter: nextValue });
+  const response = await axios.post("/todos", { filter: nextValue });
   return response.data;
 };
 
@@ -36,7 +36,7 @@ export const useAddTodoMutation = () => {
   const { setTodos } = useDragStore();
   const AddMutation = useMutation(
     async ({ title, listNum }: AddTodoProps) => {
-      const response = await axios.post("/addTodo", { title, listNum });
+      const response = await axios.post("/createTodo", { title, listNum });
       return response.data;
     },
     {
@@ -87,7 +87,7 @@ export const useUpdateTodoListMutation = () => {
         }
       }
 
-      const response = await axios.post("/updateTodoList", {
+      const response = await axios.post("/editTodoList", {
         todos,
         lists,
       });
