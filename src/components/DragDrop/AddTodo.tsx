@@ -1,7 +1,7 @@
 import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useDragStore } from "@/stores/useDragStore"; // 위에서 생성한 Zustand 스토어를 임포트합니다.
+import { useCreateTodoMutation } from "@/api/todoList";
 
 interface AddTodoProps {
   listNum: number;
@@ -10,7 +10,7 @@ interface AddTodoProps {
 const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [todoName, setTodoName] = useState("");
-  const { addTodo } = useDragStore();
+  const addTodoMutation = useCreateTodoMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);

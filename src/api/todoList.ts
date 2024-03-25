@@ -39,11 +39,11 @@ export const useTodoListInfiniteQuery = () =>
     },
   );
 
-export const useAddTodoMutation = () => {
+export const useCreateTodoMutation = () => {
   const { setTodos } = useDragStore();
   const AddMutation = useMutation(
     async ({ title, listNum }: AddTodoProps) => {
-      const response = await axios.post("/createTodo", { title, listNum });
+      const response = await axios.post("/todo", { title, listNum });
       return response.data;
     },
     {
@@ -56,11 +56,11 @@ export const useAddTodoMutation = () => {
   return AddMutation;
 };
 
-export const useAddListMutation = () => {
+export const useCreateListMutation = () => {
   const { setLists } = useDragStore();
   const AddListMutation = useMutation(
     async ({ title }: AddTodoProps) => {
-      const response = await axios.post("/addList", { title });
+      const response = await axios.post("/list", { title });
       return response.data;
     },
     {
@@ -73,7 +73,7 @@ export const useAddListMutation = () => {
   return AddListMutation;
 };
 
-export const useUpdateTodoListMutation = () => {
+export const useEditTodoListMutation = () => {
   const AddListMutation = useMutation(
     async ({ todos, lists }: UpdateTodoListProps) => {
       if (lists.length) {
@@ -94,7 +94,7 @@ export const useUpdateTodoListMutation = () => {
         }
       }
 
-      const response = await axios.post("/editTodoList", {
+      const response = await axios.post("/todoList", {
         todos,
         lists,
       });

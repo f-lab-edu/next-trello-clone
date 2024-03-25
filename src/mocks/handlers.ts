@@ -64,7 +64,7 @@ interface AddTodoList {
 
 export const addTodo = [
   rest.post<AddTodoList>(
-    "http://localhost:3000/createTodo",
+    "http://localhost:3000/todo",
     async (req, res, ctx) => {
       const { title, listNum } = req.body;
       const id = await db.lists.add({ title });
@@ -78,7 +78,7 @@ export const addTodo = [
 
 export const addList = [
   rest.post<AddTodoList>(
-    "http://localhost:3000/addList",
+    "http://localhost:3000/list",
     async (req, res, ctx) => {
       const { title } = req.body;
       const id = await db.lists.add({ title });
@@ -92,7 +92,7 @@ export const addList = [
 
 export const updateTodoList = [
   rest.post<UpdateTodoListProps>(
-    "http://localhost:3000/editTodoList",
+    "http://localhost:3000/todoList",
     async (req, res, ctx) => {
       const { todos, lists } = req.body;
       if (lists.length) {
