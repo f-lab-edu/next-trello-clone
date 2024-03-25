@@ -1,25 +1,21 @@
 "use client";
 
-//import
 import { useForm, SubmitHandler } from "react-hook-form"; // 폼 생성을 위한 import
 import { TextField, Button, CircularProgress, Alert } from "@mui/material"; // MUI 라이브러리
 import { useMutation } from "react-query";
-import { loginUser } from "../../utils/loginUser";
+import { loginUser } from "@/api/loginUser";
 
-// Form에 입력된 데이터를 받을 Inputs 인터페이스 지정
-interface Inputs {
+interface LoginFormValues {
   id: string;
   password: string;
 }
 
-// Component 생성 : React-Hook-Form 사용 컴포넌트
-const FormComponent = () => {
+const Form = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<LoginFormValues>();
 
   const loginMutation = useMutation(loginUser, {
     onSuccess: (data) => {
@@ -27,18 +23,13 @@ const FormComponent = () => {
     },
   }); // POST API일 경우 useMutation
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<LoginFormValues> = (data) => {
     loginMutation.mutate(data);
   };
-
-  console.log(watch("id")); // watch를 통해 "example"에 데이터가 전달되는지 체크
 
   return (
     /* "handleSubmit"이 onSubmit 동작 되기 전에 inputs을 식별 */
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* "register" 함수로 example 변수에 데이터 저장
-          MUI 텍스트필드 사용
-      */}
       <TextField
         defaultValue=""
         {...register("id")}
@@ -60,7 +51,6 @@ const FormComponent = () => {
         helperText={errors.password && "This field is required"}
       />
 
-      {/* MUI 버튼 사용 */}
       <Button
         type="submit"
         variant="contained"
@@ -81,5 +71,4 @@ const FormComponent = () => {
   );
 };
 
-// Export : 단일 컴포넌트 export
-export default FormComponent;
+export default Form;
