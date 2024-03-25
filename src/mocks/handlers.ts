@@ -96,15 +96,45 @@ import db from "@/db/db.model";
 //   },
 // ];
 
+// db.lists.bulkPut(initialLists);
+// db.todos.bulkPut(initialTodos);
+
+interface DataValues {
+  id: number;
+  title: string;
+  listNum: number;
+  Seq: number;
+}
+
+interface UpdateTodoListProps {
+  todos: DataValues[];
+  lists: DataValues[];
+}
+
+interface AddTodoList {
+  title: string;
+  listNum: number;
+  Seq: number;
+}
 // component
 export const handlers = [
   rest.post("http://localhost:3000/login", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: "Login successful" }));
   }),
-];
+  rest.get("http://localhost:3000/todoLists", async (req, res, ctx) => {
+    const page = Number(req.url.searchParams.get("page")) || 1;
+    const limit = Number(req.url.searchParams.get("limit")) || 5;
+    const todos = await db.todos
+      .orderBy("Seq")
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .toArray();
+    const lists = await db.lists
+      .orderBy("Seq")
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .toArray();
 
-export const todoHandlers = [
-  rest.get("http://localhost:3000/todoLists", (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -113,14 +143,7 @@ export const todoHandlers = [
       }),
     );
   }),
-];
-interface AddTodoList {
-  title: string;
-  listNum: number;
-  Seq: number;
-}
 
-export const addTodo = [
   rest.post<AddTodoList>(
     "http://localhost:3000/addTodo",
     async (req, res, ctx) => {
@@ -132,9 +155,7 @@ export const addTodo = [
       return res(ctx.status(200), ctx.json({ todos: todos }));
     },
   ),
-];
 
-export const addList = [
   rest.post<AddTodoList>(
     "http://localhost:3000/addList",
     async (req, res, ctx) => {
@@ -146,9 +167,7 @@ export const addList = [
       return res(ctx.status(200), ctx.json({ lists }));
     },
   ),
-];
 
-export const updateTodoList = [
   rest.post<UpdateTodoListProps>(
     "http://localhost:3000/updateTodoList",
     async (req, res, ctx) => {
