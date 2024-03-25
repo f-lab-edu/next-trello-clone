@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import DragDrop from "@/app/_TodoListDragAndDrop";
 import { useDragStore } from "@/stores/useDragStore";
-import { todoList } from "@/api/todoList";
+import { useTodoListInfiniteQuery } from "@/api/todoList";
 import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
 
@@ -12,14 +12,7 @@ const Home = () => {
   const [ref, inView] = useInView();
 
   const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
-    useInfiniteQuery(["page"], ({ pageParam = 1 }) => todoList({ pageParam }), {
-      getNextPageParam: (lastPage, allPosts) => {
-        return lastPage.page !== allPosts[0].totalPage
-          ? lastPage.page + 1
-          : undefined;
-      },
-      enabled: false,
-    });
+    useTodoListInfiniteQuery();
 
   useEffect(() => {
     if (inView) {

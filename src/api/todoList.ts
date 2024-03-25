@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useMutation } from "react-query";
+import { useMutation, useInfiniteQuery } from "react-query";
 import { useDragStore } from "@/stores/useDragStore";
 
 interface DataValues {
@@ -22,15 +22,22 @@ interface UpdateTodoListProps {
   lists: DataValues[];
 }
 
-const todoList = async ({ pageParam }: TodoListValue) => {
-  const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
-  return response.data;
-};
-
-const todoFilter = async (nextValue: string) => {
-  const response = await axios.post("/todos", { filter: nextValue });
-  return response.data;
-};
+export const useTodoListInfiniteQuery = () =>
+  useInfiniteQuery(
+    ["page"],
+    async ({ pageParam = 1 }) => {
+      const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
+      return response.data;
+    },
+    {
+      getNextPageParam: (lastPage, allPosts) => {
+        return lastPage.page !== allPosts[0].totalPage
+          ? lastPage.page + 1
+          : undefined;
+      },
+      enabled: false,
+    },
+  );
 
 export const useAddTodoMutation = () => {
   const { setTodos } = useDragStore();
@@ -101,4 +108,3 @@ export const useUpdateTodoListMutation = () => {
   );
   return AddListMutation;
 };
-export { todoList, todoFilter };
