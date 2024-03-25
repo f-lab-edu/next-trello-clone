@@ -56,3 +56,63 @@ export const todoHandlers = [
     );
   }),
 ];
+interface AddTodoList {
+  title: string;
+  listNum: number;
+  Seq: number;
+}
+
+export const addTodo = [
+  rest.post<AddTodoList>(
+    "http://localhost:3000/createTodo",
+    async (req, res, ctx) => {
+      const { title, listNum } = req.body;
+      const id = await db.lists.add({ title });
+      await db.todos.add({ title, listNum, Seq: id });
+
+      const todos = await db.todos.orderBy("Seq").toArray();
+      return res(ctx.status(200), ctx.json({ todos: todos }));
+    },
+  ),
+];
+
+export const addList = [
+  rest.post<AddTodoList>(
+    "http://localhost:3000/addList",
+    async (req, res, ctx) => {
+      const { title } = req.body;
+      const id = await db.lists.add({ title });
+      await db.lists.update(id, { listNum: id, Seq: id });
+
+      const lists = await db.lists.orderBy("Seq").toArray();
+      return res(ctx.status(200), ctx.json({ lists }));
+    },
+  ),
+];
+
+export const updateTodoList = [
+  rest.post<UpdateTodoListProps>(
+    "http://localhost:3000/editTodoList",
+    async (req, res, ctx) => {
+      const { todos, lists } = req.body;
+      if (lists.length) {
+        for (let index = 0; index < lists.length; index++) {
+          await db.lists.update(lists[index].id, { Seq: index });
+        }
+      }
+
+      if (todos.length) {
+        for (let index = 0; index < todos.length; index++) {
+          await db.todos.update(todos[index].id, { Seq: index });
+        }
+      }
+
+      const listsUpdate = await db.lists.orderBy("Seq").toArray();
+      const todosUpdate = await db.todos.orderBy("Seq").toArray();
+      return res(
+        ctx.status(200),
+        ctx.json({ todos: todosUpdate, lists: listsUpdate }),
+      );
+    },
+  ),
+];
