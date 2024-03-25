@@ -4,13 +4,7 @@ import { useEffect } from "react";
 import Header from "@/components/Header";
 import { setupWorker } from "msw";
 import { QueryClient, QueryClientProvider } from "react-query";
-import {
-  handlers,
-  todoHandlers,
-  addTodo,
-  addList,
-  updateTodoList,
-} from "@/mocks/handlers";
+import { handlers } from "@/mocks/handlers";
 import { css } from "@emotion/react";
 // react-query 세팅
 const queryClient = new QueryClient();
@@ -19,13 +13,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   // msw mocking
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const worker = setupWorker(
-        ...handlers,
-        ...todoHandlers,
-        ...addTodo,
-        ...addList,
-        ...updateTodoList,
-      );
+      const worker = setupWorker(...handlers);
       worker.start();
     }
   }, []);
