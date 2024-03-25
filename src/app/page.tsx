@@ -1,8 +1,12 @@
 "use client";
 
-import DragDrop from "@/components/DragDrop";
+import { useEffect } from "react";
+import DragDrop from "@/app/_DragDrop";
+import { useDragStore } from "@/stores/useDragStore";
+import { todoList } from "@/api/todoList";
+import { useInfiniteQuery } from "react-query";
+import { useInView } from "react-intersection-observer";
 
-// component
 const Home = () => {
   return (
     <div>
