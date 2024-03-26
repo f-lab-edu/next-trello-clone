@@ -1,20 +1,14 @@
 "use client";
 
-<<<<<<< HEAD
-import DragDrop from "@/components/DragDrop";
-=======
 import { useEffect } from "react";
 import DragDrop from "@/app/_TodoListDragAndDrop";
 import { useDragStore } from "@/stores/useDragStore";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
 import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
->>>>>>> 04a0201 ([refact] : infiniteQuery 수정)
 
 // component
 const Home = () => {
-<<<<<<< HEAD
-=======
   const { todos, lists, setTodos, setLists } = useDragStore();
   const [ref, inView] = useInView();
 
@@ -46,7 +40,6 @@ const Home = () => {
     return <div>An error has occurred</div>;
   }
 
->>>>>>> 04a0201 ([refact] : infiniteQuery 수정)
   return (
     <div>
       {/* 외부 컴포넌트 적용 */}
