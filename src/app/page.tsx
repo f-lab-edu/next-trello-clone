@@ -16,12 +16,10 @@ const Home = () => {
 
   useEffect(() => {
     if (inView) {
-      // useInfiniteQuery enabled:false 해제
       refetch();
       if (hasNextPage) {
         fetchNextPage();
         if (data) {
-          console.log("next data", data);
           const allTodos = data.pages.flatMap((page) => page.todos);
           setTodos(allTodos);
 
