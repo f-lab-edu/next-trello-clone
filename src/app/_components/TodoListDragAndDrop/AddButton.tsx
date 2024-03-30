@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 interface AddButtonParams {
   addData: string | number;
   children: string;
-  handleConfirmClick: () => void;
+  handleConfirmClick: (params?: string) => void;
   onChange: (params: string) => void;
 }
 

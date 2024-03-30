@@ -65,7 +65,7 @@ export const useCreateListMutation = () => {
     },
     {
       onSuccess: (data) => {
-        console.log("success", data.lists);
+        console.log("success lists", data.lists);
         setLists(data.lists);
       },
     },

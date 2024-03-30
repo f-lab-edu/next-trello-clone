@@ -8,7 +8,11 @@ import AddList from "./AddList";
 import AddTodo from "./AddTodo";
 import AddButton from "./AddButton";
 
-import { useEditTodoListMutation, useCreateListMutation } from "@/api/todoList";
+import {
+  useEditTodoListMutation,
+  useCreateListMutation,
+  useCreateTodoMutation,
+} from "@/api/todoList";
 
 interface DataValues {
   id: number;
@@ -63,8 +67,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   const addListMutation = useCreateListMutation();
   const [listName, setListName] = useState("");
   const { addList } = useDragStore();
-
-  const handleConfirmClick = () => {
+  const handleListConfirmClick = () => {
     addListMutation.mutate({ title: listName });
     addList(listName);
     setListName("");
@@ -72,6 +75,20 @@ const DragDrop: React.FC<DragDropValues> = ({
 
   const handleOnChange = (params: string) => {
     setListName(params);
+  };
+
+  // todo add functions
+  const addTodoMutation = useCreateTodoMutation();
+  const [todoName, setTodoName] = useState("");
+  // const { addTodo } = useDragStore();
+  const handleTodoConfirmClick = (id: number) => {
+    addTodoMutation.mutate({ title: todoName, listNum: id });
+    // addTodo(todoName, id);
+    setTodoName("");
+  };
+
+  const handleOnChangeTodo = (params: string) => {
+    setTodoName(params);
   };
 
   useEffect(() => {
@@ -210,14 +227,21 @@ const DragDrop: React.FC<DragDropValues> = ({
                       {todo.title}
                     </TodoContainer>
                   ))}
-              <AddTodo listNum={list.listNum} />
+              {/* <AddTodo listNum={list.listNum} /> */}
+              <AddButton
+                addData={todoName}
+                handleConfirmClick={() => handleTodoConfirmClick(list.listNum)}
+                onChange={handleOnChangeTodo}
+              >
+                + Add Todo
+              </AddButton>
             </div>
           </Card>
         ))}
       {children}
       <AddButton
         addData={listName}
-        handleConfirmClick={handleConfirmClick}
+        handleConfirmClick={handleListConfirmClick}
         onChange={handleOnChange}
       >
         + Add List
