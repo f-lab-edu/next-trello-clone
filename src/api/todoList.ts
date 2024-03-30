@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useMutation, useInfiniteQuery } from "react-query";
+import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
 import { useDragStore } from "@/stores/useDragStore";
 
 interface DataValues {
@@ -22,25 +22,28 @@ interface UpdateTodoListProps {
   lists: DataValues[];
 }
 
+const TodoListDataAPI = async ({ pageParam = 1 }) => {
+  const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
+  return response.data;
+};
 export const useTodoListInfiniteQuery = () =>
-  useInfiniteQuery(
-    ["page"],
-    async ({ pageParam = 1 }) => {
-      const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
-      return response.data;
+  useInfiniteQuery({
+    queryFn: TodoListDataAPI,
+    queryKey: ["infiniteScroll"],
+    staleTime: Infinity,
+    getNextPageParam: (lastPage, allPosts) => {
+      return lastPage.page !== allPosts[0].totalPage
+        ? lastPage.page + 1
+        : undefined;
     },
-    {
-      getNextPageParam: (lastPage, allPosts) => {
-        return lastPage.page !== allPosts[0].totalPage
-          ? lastPage.page + 1
-          : undefined;
-      },
-      enabled: false,
+    onSuccess: (data) => {
+      console.log("data", data);
     },
-  );
+  });
 
 export const useCreateTodoMutation = () => {
   const { setTodos } = useDragStore();
+  const queryClient = useQueryClient();
   const AddMutation = useMutation(
     async ({ title, listNum }: AddTodoProps) => {
       const response = await axios.post("/todo", { title, listNum });
@@ -49,6 +52,7 @@ export const useCreateTodoMutation = () => {
     {
       onSuccess: (data) => {
         console.log("success", data.todos);
+        queryClient.invalidateQueries("infiniteScroll");
         setTodos(data.todos);
       },
     },
@@ -57,6 +61,7 @@ export const useCreateTodoMutation = () => {
 };
 
 export const useCreateListMutation = () => {
+  const queryClient = useQueryClient();
   const { setLists } = useDragStore();
   const AddListMutation = useMutation(
     async ({ title }: AddTodoProps) => {
@@ -66,6 +71,7 @@ export const useCreateListMutation = () => {
     {
       onSuccess: (data) => {
         console.log("success lists", data.lists);
+        queryClient.invalidateQueries("infiniteScroll");
         setLists(data.lists);
       },
     },

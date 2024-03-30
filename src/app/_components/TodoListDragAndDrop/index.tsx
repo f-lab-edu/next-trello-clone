@@ -19,7 +19,13 @@ interface DataValues {
   Seq?: number;
 }
 
+interface TodoListDataParams {
+  todos: DataValues[];
+  lists: DataValues[];
+}
+
 interface DragDropValues {
+  todoListData: TodoListDataParams[];
   todos: DataValues[];
   lists: DataValues[];
   setTodos: (props: DataValues[]) => void;
@@ -30,6 +36,11 @@ interface DragDropValues {
 interface TodoContainerProps {
   draggingTodoId: number | null;
   todoId: number;
+}
+
+interface TodoListDnDParams {
+  todos: DataValues[];
+  lists: DataValues[];
 }
 
 const TodoContainer = styled("div")<TodoContainerProps>`
@@ -49,6 +60,7 @@ const ListContainer = styled("div")`
 `;
 
 const DragDrop: React.FC<DragDropValues> = ({
+  todoListData,
   todos,
   lists,
   setTodos,
@@ -59,6 +71,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
   const [dragOverListId, setDragOverListId] = useState<number | null>(null);
+
   const updateTodoList = useEditTodoListMutation();
 
   // list add functions
@@ -70,7 +83,6 @@ const DragDrop: React.FC<DragDropValues> = ({
     addList(listName);
     setListName("");
   };
-
   const handleOnChange = (params: string) => {
     setListName(params);
   };
@@ -82,14 +94,17 @@ const DragDrop: React.FC<DragDropValues> = ({
     addTodoMutation.mutate({ title: todoName, listNum: id });
     setTodoName("");
   };
-
   const handleOnChangeTodo = (params: string) => {
     setTodoName(params);
   };
 
   useEffect(() => {
-    updateTodoList.mutate({ todos, lists });
-  }, [todos, lists]);
+    console.log("todoList Data DND", todoListData);
+    const allTodos = todoListData.flatMap((page) => page.todos);
+    const allLists = todoListData.flatMap((page) => page.lists);
+
+    updateTodoList.mutate({ todos: allTodos, lists: allLists });
+  }, [todoListData]);
 
   // Drag&Drop 동작 함수
   const handleDragStart = (
@@ -123,6 +138,7 @@ const DragDrop: React.FC<DragDropValues> = ({
   const handleDropOnTodo = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
+    todos: DataValues[],
   ) => {
     e.preventDefault();
     if (draggingTodoId) {
@@ -147,11 +163,13 @@ const DragDrop: React.FC<DragDropValues> = ({
   const handleDropOnList = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
+    todos: DataValues[],
+    lists: DataValues[],
   ) => {
     // todo
     e.preventDefault();
     if (draggingTodoId) {
-      handleDropOnTodo(e, targetList);
+      handleDropOnTodo(e, targetList, todos);
     }
 
     // list
@@ -175,64 +193,80 @@ const DragDrop: React.FC<DragDropValues> = ({
 
   return (
     <ListContainer>
-      {lists &&
-        lists.map((list) => (
-          <Card
-            key={list.id}
-            draggable
-            onDragStart={(e) => handleDragStart(e, list.id, setDraggingListId)}
-            onDragOver={(e) => handleDragOver(e, list.id, setDragOverListId)}
-            onDrop={(e) => handleDropOnList(e, list.id)}
-            onDragEnd={(e) =>
-              handleDragEnd(e, setDraggingListId, setDragOverListId)
-            }
-            sx={{
-              minHeight: "50px",
-              minWidth: "20vw",
-              margin: "8px",
-              padding: "10px",
-              backgroundColor: "#333",
-              display: "inline-block",
-              flexShrink: 0,
-            }}
-          >
-            <Typography variant="h6" sx={{ color: " #eee" }}>
-              {list.title}
-            </Typography>
-
-            <div>
-              {todos &&
-                todos
-                  .filter((todo) => todo.listNum === list.listNum)
-                  .map((todo, _index) => (
-                    <TodoContainer
-                      key={todo.id}
-                      draggable
-                      onDragStart={(e) =>
-                        handleDragStart(e, todo.id, setDraggingTodoId)
-                      }
-                      onDragOver={(e) =>
-                        handleDragOver(e, todo.id, setDragOverTodoId)
-                      }
-                      onDragEnd={(e) =>
-                        handleDragEnd(e, setDraggingTodoId, setDragOverTodoId)
-                      }
-                      draggingTodoId={draggingTodoId}
-                      todoId={todo.id}
-                    >
-                      {todo.title}
-                    </TodoContainer>
-                  ))}
-              <AddButton
-                addData={todoName}
-                handleClickConfirm={() => handleTodoConfirmClick(list.listNum)}
-                onChange={handleOnChangeTodo}
+      {todoListData &&
+        todoListData.map(
+          (data, _index) =>
+            data.lists &&
+            data.lists.map((list) => (
+              <Card
+                key={list.id}
+                draggable
+                onDragStart={(e) =>
+                  handleDragStart(e, list.id, setDraggingListId)
+                }
+                onDragOver={(e) =>
+                  handleDragOver(e, list.id, setDragOverListId)
+                }
+                onDrop={(e) =>
+                  handleDropOnList(e, list.id, data.todos, data.lists)
+                }
+                onDragEnd={(e) =>
+                  handleDragEnd(e, setDraggingListId, setDragOverListId)
+                }
+                sx={{
+                  minHeight: "50px",
+                  minWidth: "20vw",
+                  margin: "8px",
+                  padding: "10px",
+                  backgroundColor: "#333",
+                  display: "inline-block",
+                  flexShrink: 0,
+                }}
               >
-                + Add Todo
-              </AddButton>
-            </div>
-          </Card>
-        ))}
+                <Typography variant="h6" sx={{ color: " #eee" }}>
+                  {list.title}
+                </Typography>
+
+                <div>
+                  {data.todos &&
+                    data.todos
+                      .filter((todo) => todo.listNum === list.listNum)
+                      .map((todo, _index) => (
+                        <TodoContainer
+                          key={todo.id}
+                          draggable
+                          onDragStart={(e) =>
+                            handleDragStart(e, todo.id, setDraggingTodoId)
+                          }
+                          onDragOver={(e) =>
+                            handleDragOver(e, todo.id, setDragOverTodoId)
+                          }
+                          onDragEnd={(e) =>
+                            handleDragEnd(
+                              e,
+                              setDraggingTodoId,
+                              setDragOverTodoId,
+                            )
+                          }
+                          draggingTodoId={draggingTodoId}
+                          todoId={todo.id}
+                        >
+                          {todo.title}
+                        </TodoContainer>
+                      ))}
+                  <AddButton
+                    addData={todoName}
+                    handleClickConfirm={() =>
+                      handleTodoConfirmClick(list.listNum)
+                    }
+                    onChange={handleOnChangeTodo}
+                  >
+                    + Add Todo
+                  </AddButton>
+                </div>
+              </Card>
+            )),
+        )}
       {children}
       <AddButton
         addData={listName}

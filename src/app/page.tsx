@@ -16,19 +16,20 @@ const Home = () => {
 
   useEffect(() => {
     if (inView) {
-      refetch();
+      console.log("render data", inView, data);
+      // refetch();
       if (hasNextPage) {
         fetchNextPage();
-        if (data) {
-          const allTodos = data.pages.flatMap((page) => page.todos);
-          setTodos(allTodos);
+      }
+      if (data) {
+        const allTodos = data.pages.flatMap((page) => page.todos);
+        setTodos(allTodos);
 
-          const allLists = data.pages.flatMap((page) => page.lists);
-          setLists(allLists);
-        }
+        const allLists = data.pages.flatMap((page) => page.lists);
+        setLists(allLists);
       }
     }
-  }, [inView, hasNextPage, fetchNextPage]);
+  }, [inView]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -41,14 +42,17 @@ const Home = () => {
   return (
     <div>
       {/* 외부 컴포넌트 적용 */}
-      <DragDrop
-        todos={todos}
-        lists={lists}
-        setTodos={setTodos}
-        setLists={setLists}
-      >
-        <div ref={ref}></div>
-      </DragDrop>
+      {data ? (
+        <DragDrop
+          todoListData={data.pages}
+          todos={todos}
+          lists={lists}
+          setTodos={setTodos}
+          setLists={setLists}
+        >
+          <div ref={ref}></div>
+        </DragDrop>
+      ) : null}
     </div>
   );
 };
