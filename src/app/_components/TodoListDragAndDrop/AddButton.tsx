@@ -7,6 +7,7 @@ import styled from "@emotion/styled";
 
 interface AddButtonParams {
   id: number;
+  addData: string | number;
   children: string;
   handleConfirmClick: () => void;
 }
@@ -17,20 +18,26 @@ const Container = styled("div")`
   min-width: 20vw,
 `;
 
-const AddTodo: FC<AddButtonParams> = ({ id, children, handleConfirmClick }) => {
+const AddTodo: FC<AddButtonParams> = ({
+  id,
+  addData,
+  children,
+  handleConfirmClick,
+}) => {
   const [isAdding, setIsAdding] = useState(false);
-  const [todoName, setTodoName] = useState("");
+  // const [todoName, setTodoName] = useState("");
   // const addTodoMutation = useCreateTodoMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);
   };
-  // // post api 변경
-  // const handleConfirmClick = async () => {
-  //   addTodoMutation.mutate({ title: todoName, listNum: id });
-  //   setIsAdding(false);
-  //   setTodoName("");
-  // };
+  // post api 변경
+  const handleConfirm = async () => {
+    // addTodoMutation.mutate({ title: todoName, listNum: id });
+    handleConfirmClick();
+    setIsAdding(false);
+    // setTodoName("");
+  };
 
   const handleCancelClick = () => {
     setIsAdding(false);
@@ -47,14 +54,14 @@ const AddTodo: FC<AddButtonParams> = ({ id, children, handleConfirmClick }) => {
             borderRadius: "8px",
             marginBottom: "8px",
           }}
-          value={todoName}
-          onChange={(e) => setTodoName(e.target.value)}
+          value={addData}
+          // onChange={(e) => setTodoName(e.target.value)}
         />
         <div>
           <Button
             sx={{ mr: 1, flexShrink: 0 }}
             variant="contained"
-            onClick={handleConfirmClick}
+            onClick={handleConfirm}
           >
             Confirm
           </Button>
