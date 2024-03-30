@@ -4,8 +4,6 @@ import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import { useDragStore } from "@/stores/useDragStore";
-import AddList from "./AddList";
-import AddTodo from "./AddTodo";
 import AddButton from "./AddButton";
 
 import {
@@ -80,10 +78,8 @@ const DragDrop: React.FC<DragDropValues> = ({
   // todo add functions
   const addTodoMutation = useCreateTodoMutation();
   const [todoName, setTodoName] = useState("");
-  // const { addTodo } = useDragStore();
   const handleTodoConfirmClick = (id: number) => {
     addTodoMutation.mutate({ title: todoName, listNum: id });
-    // addTodo(todoName, id);
     setTodoName("");
   };
 
@@ -227,7 +223,6 @@ const DragDrop: React.FC<DragDropValues> = ({
                       {todo.title}
                     </TodoContainer>
                   ))}
-              {/* <AddTodo listNum={list.listNum} /> */}
               <AddButton
                 addData={todoName}
                 handleConfirmClick={() => handleTodoConfirmClick(list.listNum)}
