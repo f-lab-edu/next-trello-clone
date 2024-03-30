@@ -3,7 +3,6 @@ import React, { useState, useEffect, ReactNode } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import { useDragStore } from "@/stores/useDragStore";
 import AddButton from "./AddButton";
 
 import {
@@ -26,21 +25,12 @@ interface TodoListDataParams {
 
 interface DragDropValues {
   todoListData: TodoListDataParams;
-  todos: DataValues[];
-  lists: DataValues[];
-  setTodos: (props: DataValues[]) => void;
-  setLists: (props: DataValues[]) => void;
   children?: ReactNode;
 }
 
 interface TodoContainerProps {
   draggingTodoId: number | null;
   todoId: number;
-}
-
-interface TodoListDnDParams {
-  todos: DataValues[];
-  lists: DataValues[];
 }
 
 const TodoContainer = styled("div")<TodoContainerProps>`
@@ -59,14 +49,7 @@ const ListContainer = styled("div")`
   overflow-x: auto;
 `;
 
-const DragDrop: React.FC<DragDropValues> = ({
-  todoListData,
-  todos,
-  lists,
-  setTodos,
-  setLists,
-  children,
-}) => {
+const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   const [draggingTodoId, setDraggingTodoId] = useState<number | null>(null);
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
@@ -97,14 +80,6 @@ const DragDrop: React.FC<DragDropValues> = ({
   const handleOnChangeTodo = (params: string) => {
     setTodoName(params);
   };
-
-  // useEffect(() => {
-  //   console.log("todoList Data DND", todoListData);
-  //   const allTodos = todoListData.flatMap((page) => page.todos);
-  //   const allLists = todoListData.flatMap((page) => page.lists);
-
-  //   updateTodoList.mutate({ todos: allTodos, lists: allLists });
-  // }, [todoListData]);
 
   // Drag&Drop 동작 함수
   const handleDragStart = (
@@ -152,16 +127,13 @@ const DragDrop: React.FC<DragDropValues> = ({
       );
       const draggingItemContent = newTodoList[draggingItemIndex];
       draggingItemContent.listNum = targetList;
-      console.log("target", targetList, draggingItemContent);
       newTodoList.splice(draggingItemIndex, 1);
       newTodoList.splice(dragOverItemIndex, 0, draggingItemContent);
-      console.log("chage", dragOverItemIndex, draggingItemContent);
 
       setDraggingTodoId(null);
       setDragOverTodoId(null);
-      console.log("todos", newTodoList);
+
       updateTodoList.mutate({ todos: newTodoList, lists: lists });
-      // setTodos(newTodoList);
     }
   };
 
@@ -192,9 +164,8 @@ const DragDrop: React.FC<DragDropValues> = ({
 
       setDraggingListId(null);
       setDragOverListId(null);
-      console.log("lists", newList);
+
       updateTodoList.mutate({ todos: todos, lists: newList });
-      // setLists(newList);
     }
   };
 

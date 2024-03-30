@@ -9,9 +9,6 @@ interface DataValues {
   Seq?: number;
 }
 
-interface TodoListValue {
-  pageParam: number;
-}
 interface AddTodoProps {
   title: string;
   listNum?: number;

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import DragDrop from "@/app/_components/TodoListDragAndDrop";
-import { useDragStore } from "@/stores/useDragStore";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
 import { useInView } from "react-intersection-observer";
 
@@ -17,7 +16,6 @@ interface TodoList {
   lists: DataValues[];
 }
 const Home = () => {
-  const { todos, lists, setTodos, setLists } = useDragStore();
   const [todoList, setTodoList] = useState<TodoList | undefined>();
   const [ref, inView] = useInView();
 
@@ -32,12 +30,9 @@ const Home = () => {
     }
     if (data) {
       const allTodos = data.pages.flatMap((page) => page.todos);
-      setTodos(allTodos);
-
       const allLists = data.pages.flatMap((page) => page.lists);
-      setLists(allLists);
+
       setTodoList({ todos: allTodos, lists: allLists });
-      console.log("inview", todoList);
     }
   }, [inView, data]);
 
@@ -53,13 +48,7 @@ const Home = () => {
     <div>
       {/* 외부 컴포넌트 적용 */}
       {todoList ? (
-        <DragDrop
-          todoListData={todoList}
-          todos={todos}
-          lists={lists}
-          setTodos={setTodos}
-          setLists={setLists}
-        >
+        <DragDrop todoListData={todoList}>
           <div ref={ref}></div>
         </DragDrop>
       ) : null}
