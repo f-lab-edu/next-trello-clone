@@ -21,6 +21,7 @@ const Home = () => {
       if (hasNextPage) {
         fetchNextPage();
         if (data) {
+          console.log("next data", data);
           const allTodos = data.pages.flatMap((page) => page.todos);
           setTodos(allTodos);
 

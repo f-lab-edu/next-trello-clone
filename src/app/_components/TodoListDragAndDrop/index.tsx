@@ -3,10 +3,12 @@ import React, { useState, useEffect, ReactNode } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-
+import { useDragStore } from "@/stores/useDragStore";
 import AddList from "./AddList";
 import AddTodo from "./AddTodo";
-import { useEditTodoListMutation } from "@/api/todoList";
+import AddButton from "./AddButton";
+
+import { useEditTodoListMutation, useCreateListMutation } from "@/api/todoList";
 
 interface DataValues {
   id: number;
@@ -56,6 +58,21 @@ const DragDrop: React.FC<DragDropValues> = ({
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
   const [dragOverListId, setDragOverListId] = useState<number | null>(null);
   const updateTodoList = useEditTodoListMutation();
+
+  // list add functions
+  const addListMutation = useCreateListMutation();
+  const [listName, setListName] = useState("");
+  const { addList } = useDragStore();
+
+  const handleConfirmClick = () => {
+    addListMutation.mutate({ title: listName });
+    addList(listName);
+    setListName("");
+  };
+
+  const handleOnChange = (params: string) => {
+    setListName(params);
+  };
 
   useEffect(() => {
     updateTodoList.mutate({ todos, lists });
@@ -198,7 +215,13 @@ const DragDrop: React.FC<DragDropValues> = ({
           </Card>
         ))}
       {children}
-      <AddList />
+      <AddButton
+        addData={listName}
+        handleConfirmClick={handleConfirmClick}
+        onChange={handleOnChange}
+      >
+        + Add List
+      </AddButton>
     </ListContainer>
   );
 };

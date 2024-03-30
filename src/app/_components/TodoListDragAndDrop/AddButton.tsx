@@ -2,14 +2,13 @@
 import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useCreateTodoMutation } from "@/api/todoList";
 import styled from "@emotion/styled";
 
 interface AddButtonParams {
-  id: number;
   addData: string | number;
   children: string;
   handleConfirmClick: () => void;
+  onChange: (params: string) => void;
 }
 
 const Container = styled("div")`
@@ -19,24 +18,21 @@ const Container = styled("div")`
 `;
 
 const AddTodo: FC<AddButtonParams> = ({
-  id,
   addData,
   children,
   handleConfirmClick,
+  onChange,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
-  // const [todoName, setTodoName] = useState("");
-  // const addTodoMutation = useCreateTodoMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);
   };
+
   // post api 변경
   const handleConfirm = async () => {
-    // addTodoMutation.mutate({ title: todoName, listNum: id });
     handleConfirmClick();
     setIsAdding(false);
-    // setTodoName("");
   };
 
   const handleCancelClick = () => {
@@ -55,7 +51,7 @@ const AddTodo: FC<AddButtonParams> = ({
             marginBottom: "8px",
           }}
           value={addData}
-          // onChange={(e) => setTodoName(e.target.value)}
+          onChange={(e) => onChange(e.target.value)}
         />
         <div>
           <Button
