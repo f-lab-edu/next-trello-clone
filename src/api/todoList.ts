@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
-import { useDragStore } from "@/stores/useDragStore";
 
 interface DataValues {
   id: number;
@@ -39,7 +38,6 @@ export const useTodoListInfiniteQuery = () =>
   });
 
 export const useCreateTodoMutation = () => {
-  const { setTodos } = useDragStore();
   const queryClient = useQueryClient();
   const AddMutation = useMutation(
     async ({ title, listNum }: AddTodoProps) => {
@@ -50,7 +48,6 @@ export const useCreateTodoMutation = () => {
       onSuccess: (data) => {
         console.log("success", data.todos);
         queryClient.invalidateQueries("infiniteScroll");
-        setTodos(data.todos);
       },
     },
   );
@@ -59,7 +56,7 @@ export const useCreateTodoMutation = () => {
 
 export const useCreateListMutation = () => {
   const queryClient = useQueryClient();
-  const { setLists } = useDragStore();
+
   const AddListMutation = useMutation(
     async ({ title }: AddTodoProps) => {
       const response = await axios.post("/list", { title });
@@ -69,7 +66,6 @@ export const useCreateListMutation = () => {
       onSuccess: (data) => {
         console.log("success lists", data.lists);
         queryClient.invalidateQueries("infiniteScroll");
-        setLists(data.lists);
       },
     },
   );
