@@ -7,7 +7,7 @@ import styled from "@emotion/styled";
 interface AddButtonParams {
   addData: string | number;
   children: string;
-  handleConfirmClick: (params?: string) => void;
+  handleClickConfirm: (params?: string) => void;
   onChange: (params: string) => void;
 }
 
@@ -20,7 +20,7 @@ const Container = styled("div")`
 const AddTodo: FC<AddButtonParams> = ({
   addData,
   children,
-  handleConfirmClick,
+  handleClickConfirm,
   onChange,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
@@ -30,8 +30,8 @@ const AddTodo: FC<AddButtonParams> = ({
   };
 
   // post api 변경
-  const handleConfirm = async () => {
-    handleConfirmClick();
+  const handleSubmit = async () => {
+    handleClickConfirm();
     setIsAdding(false);
   };
 
@@ -57,7 +57,7 @@ const AddTodo: FC<AddButtonParams> = ({
           <Button
             sx={{ mr: 1, flexShrink: 0 }}
             variant="contained"
-            onClick={handleConfirm}
+            onClick={handleSubmit}
           >
             Confirm
           </Button>

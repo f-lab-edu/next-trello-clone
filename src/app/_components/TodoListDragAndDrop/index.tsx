@@ -225,7 +225,7 @@ const DragDrop: React.FC<DragDropValues> = ({
                   ))}
               <AddButton
                 addData={todoName}
-                handleConfirmClick={() => handleTodoConfirmClick(list.listNum)}
+                handleClickConfirm={() => handleTodoConfirmClick(list.listNum)}
                 onChange={handleOnChangeTodo}
               >
                 + Add Todo
@@ -236,7 +236,7 @@ const DragDrop: React.FC<DragDropValues> = ({
       {children}
       <AddButton
         addData={listName}
-        handleConfirmClick={handleListConfirmClick}
+        handleClickConfirm={handleListConfirmClick}
         onChange={handleOnChange}
       >
         + Add List
