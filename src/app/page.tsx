@@ -4,23 +4,21 @@ import { useEffect } from "react";
 import DragDrop from "@/app/_components/TodoListDragAndDrop";
 import { useDragStore } from "@/stores/useDragStore";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
-import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
 
 const Home = () => {
   const { todos, lists, setTodos, setLists } = useDragStore();
   const [ref, inView] = useInView();
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useTodoListInfiniteQuery();
 
   useEffect(() => {
     if (inView) {
-      console.log("render data", inView, data);
-      // refetch();
       if (hasNextPage) {
         fetchNextPage();
       }
+
       if (data) {
         const allTodos = data.pages.flatMap((page) => page.todos);
         setTodos(allTodos);

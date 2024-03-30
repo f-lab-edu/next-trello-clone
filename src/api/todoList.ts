@@ -80,6 +80,7 @@ export const useCreateListMutation = () => {
 };
 
 export const useEditTodoListMutation = () => {
+  const queryClient = useQueryClient();
   const AddListMutation = useMutation(
     async ({ todos, lists }: UpdateTodoListProps) => {
       if (lists.length) {
@@ -109,6 +110,7 @@ export const useEditTodoListMutation = () => {
     {
       onSuccess: (data) => {
         console.log("update success", data.lists, data.todos);
+        queryClient.invalidateQueries("infiniteScroll");
       },
     },
   );
