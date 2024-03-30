@@ -96,6 +96,7 @@ export const useEditTodoListMutation = () => {
         for (let index = 0; index < todos.length; index++) {
           todos[index] = {
             ...todos[index],
+            listNum: todos[index].listNum,
             Seq: index,
           };
         }

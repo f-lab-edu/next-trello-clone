@@ -127,7 +127,11 @@ export const handlers = [
   rest.get("http://localhost:3000/todoLists", async (req, res, ctx) => {
     const page = Number(req.url.searchParams.get("page")) || 1;
     const limit = Number(req.url.searchParams.get("limit")) || 5;
-    const todos = await db.todos.orderBy("Seq").toArray();
+    const todos = await db.todos
+      .orderBy("Seq")
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .toArray();
     const lists = await db.lists
       .orderBy("Seq")
       .offset((page - 1) * limit)
@@ -183,7 +187,10 @@ export const handlers = [
 
       if (todos.length) {
         for (let index = 0; index < todos.length; index++) {
-          await db.todos.update(todos[index].id, { Seq: index });
+          await db.todos.update(todos[index].id, {
+            Seq: index,
+            listNum: todos[index].listNum,
+          });
         }
       }
 
