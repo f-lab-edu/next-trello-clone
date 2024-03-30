@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useDragStore } from "@/stores/useDragStore"; // 위에서 생성한 Zustand 스토어를 임포트합니다.
+import { useDragStore } from "@/stores/useDragStore";
 import { useCreateListMutation } from "@/api/todoList";
 import styled from "@emotion/styled";
 
