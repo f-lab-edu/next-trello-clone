@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, ReactNode } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
@@ -60,10 +60,8 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   // list add functions
   const addListMutation = useCreateListMutation();
   const [listName, setListName] = useState("");
-  // const { addList } = useDragStore();
   const handleListConfirmClick = () => {
     addListMutation.mutate({ title: listName });
-    // addList(listName);
     setListName("");
   };
   const handleOnChange = (params: string) => {

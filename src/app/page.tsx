@@ -11,6 +11,7 @@ interface DataValues {
   listNum: number;
   Seq: number;
 }
+
 interface TodoList {
   todos: DataValues[];
   lists: DataValues[];
