@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import DragDrop from "@/app/_TodoListDragAndDrop";
+import DragDrop from "@/app/_components/TodoListDragAndDrop";
 import { useDragStore } from "@/stores/useDragStore";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
 import { useInfiniteQuery } from "react-query";

@@ -116,11 +116,14 @@ interface AddTodoList {
   listNum: number;
   Seq: number;
 }
-// component
+
 export const handlers = [
+  // mock login
   rest.post("http://localhost:3000/login", (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: "Login successful" }));
   }),
+
+  // mock todolists indexed DB data
   rest.get("http://localhost:3000/todoLists", async (req, res, ctx) => {
     const page = Number(req.url.searchParams.get("page")) || 1;
     const limit = Number(req.url.searchParams.get("limit")) || 5;
@@ -146,6 +149,7 @@ export const handlers = [
     );
   }),
 
+  // mock create todo item data
   rest.post<AddTodoList>(
     "http://localhost:3000/todo",
     async (req, res, ctx) => {
@@ -158,6 +162,7 @@ export const handlers = [
     },
   ),
 
+  // mock create list item data
   rest.post<AddTodoList>(
     "http://localhost:3000/list",
     async (req, res, ctx) => {
