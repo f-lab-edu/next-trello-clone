@@ -16,7 +16,7 @@ interface DataValues {
   id: number;
   title: string;
   listNum: number;
-  Seq?: number;
+  Seq: number;
 }
 
 interface TodoListDataParams {
@@ -77,10 +77,10 @@ const DragDrop: React.FC<DragDropValues> = ({
   // list add functions
   const addListMutation = useCreateListMutation();
   const [listName, setListName] = useState("");
-  const { addList } = useDragStore();
+  // const { addList } = useDragStore();
   const handleListConfirmClick = () => {
     addListMutation.mutate({ title: listName });
-    addList(listName);
+    // addList(listName);
     setListName("");
   };
   const handleOnChange = (params: string) => {
@@ -152,7 +152,7 @@ const DragDrop: React.FC<DragDropValues> = ({
       );
       const draggingItemContent = newTodoList[draggingItemIndex];
       draggingItemContent.listNum = targetList;
-      console.log("target", targetList, draggingItemIndex);
+      console.log("target", targetList, draggingItemContent);
       newTodoList.splice(draggingItemIndex, 1);
       newTodoList.splice(dragOverItemIndex, 0, draggingItemContent);
       console.log("chage", dragOverItemIndex, draggingItemContent);
@@ -243,6 +243,9 @@ const DragDrop: React.FC<DragDropValues> = ({
                         }
                         onDragOver={(e) =>
                           handleDragOver(e, todo.id, setDragOverTodoId)
+                        }
+                        onDrop={(e) =>
+                          handleDropOnTodo(e, list.id, data.todos, data.lists)
                         }
                         onDragEnd={(e) =>
                           handleDragEnd(e, setDraggingTodoId, setDragOverTodoId)

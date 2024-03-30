@@ -25,6 +25,7 @@ const Home = () => {
 
         const allLists = data.pages.flatMap((page) => page.lists);
         setLists(allLists);
+        console.log(data);
       }
     }
   }, [inView]);
