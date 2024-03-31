@@ -1,24 +1,8 @@
 // import
 import { rest } from "msw"; // msw 1.0v 기준
 import db from "@/db/db.model";
-
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq: number;
-}
-
-interface UpdateTodoListProps {
-  todos: DataValues[];
-  lists: DataValues[];
-}
-
-interface AddTodoList {
-  title: string;
-  listNum: number;
-  Seq: number;
-}
+import { TodoListParams } from "TodoListDragAndDrop";
+import { AddTodoList } from "AddButton";
 
 export const handlers = [
   // mock login
@@ -78,7 +62,7 @@ export const handlers = [
     },
   ),
 
-  rest.post<UpdateTodoListProps>(
+  rest.post<TodoListParams>(
     "http://localhost:3000/todoList",
     async (req, res, ctx) => {
       const { todos, lists } = req.body;

@@ -38,4 +38,10 @@ declare module "AddButton" {
     handleClickConfirm: (params?: string) => void;
     onChange: (params: string) => void;
   }
+
+  interface AddTodoList {
+    title: string;
+    listNum: number;
+    Seq: number;
+  }
 }
