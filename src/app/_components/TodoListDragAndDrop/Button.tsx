@@ -11,7 +11,7 @@ const Container = styled("div")`
   min-width: 20vw,
 `;
 
-const AddTodo: FC<AddButtonParams> = ({
+const AddButton: FC<AddButtonParams> = ({
   addData,
   children,
   handleClickConfirm,
@@ -74,4 +74,4 @@ const AddTodo: FC<AddButtonParams> = ({
   );
 };
 
-export default AddTodo;
+export default AddButton;
