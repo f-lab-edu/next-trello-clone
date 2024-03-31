@@ -44,4 +44,9 @@ declare module "AddButton" {
     listNum: number;
     Seq: number;
   }
+
+  interface AddTodoParams {
+    title: string;
+    listNum?: number;
+  }
 }

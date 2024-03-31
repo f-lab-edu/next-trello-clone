@@ -1,22 +1,7 @@
 import axios from "axios";
 import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
-
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq?: number;
-}
-
-interface AddTodoProps {
-  title: string;
-  listNum?: number;
-}
-
-interface UpdateTodoListProps {
-  todos: DataValues[];
-  lists: DataValues[];
-}
+import { TodoListParams } from "TodoListDragAndDrop";
+import { AddTodoParams } from "AddButton";
 
 const TodoListDataAPI = async ({ pageParam = 1 }) => {
   const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
@@ -40,7 +25,7 @@ export const useTodoListInfiniteQuery = () =>
 export const useCreateTodoMutation = () => {
   const queryClient = useQueryClient();
   const AddMutation = useMutation(
-    async ({ title, listNum }: AddTodoProps) => {
+    async ({ title, listNum }: AddTodoParams) => {
       const response = await axios.post("/todo", { title, listNum });
       return response.data;
     },
@@ -58,7 +43,7 @@ export const useCreateListMutation = () => {
   const queryClient = useQueryClient();
 
   const AddListMutation = useMutation(
-    async ({ title }: AddTodoProps) => {
+    async ({ title }: AddTodoParams) => {
       const response = await axios.post("/list", { title });
       return response.data;
     },
@@ -75,7 +60,7 @@ export const useCreateListMutation = () => {
 export const useEditTodoListMutation = () => {
   const queryClient = useQueryClient();
   const AddListMutation = useMutation(
-    async ({ todos, lists }: UpdateTodoListProps) => {
+    async ({ todos, lists }: TodoListParams) => {
       if (lists.length) {
         for (let index = 0; index < lists.length; index++) {
           lists[index] = {
