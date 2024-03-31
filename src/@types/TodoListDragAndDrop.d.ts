@@ -30,3 +30,12 @@ declare module "TodoListDragAndDrop" {
     todoId: number;
   }
 }
+
+declare module "AddButton" {
+  interface AddButtonParams {
+    addData: string | number;
+    children: string;
+    handleClickConfirm: (params?: string) => void;
+    onChange: (params: string) => void;
+  }
+}

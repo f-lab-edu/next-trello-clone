@@ -3,13 +3,7 @@ import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import styled from "@emotion/styled";
-
-interface AddButtonParams {
-  addData: string | number;
-  children: string;
-  handleClickConfirm: (params?: string) => void;
-  onChange: (params: string) => void;
-}
+import { AddButtonParams } from "AddButton";
 
 const Container = styled("div")`
   display: inline-block,
