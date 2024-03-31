@@ -4,6 +4,13 @@ import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import AddButton from "./AddButton";
+import {
+  todoParams,
+  listParams,
+  TodoListParams,
+  DragAndDropParams,
+  TodoContainerParams,
+} from "TodoListDragAndDrop";
 
 import {
   useEditTodoListMutation,
@@ -11,29 +18,7 @@ import {
   useCreateTodoMutation,
 } from "@/api/todoList";
 
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq: number;
-}
-
-interface TodoListDataParams {
-  todos: DataValues[];
-  lists: DataValues[];
-}
-
-interface DragDropValues {
-  todoListData: TodoListDataParams;
-  children?: ReactNode;
-}
-
-interface TodoContainerProps {
-  draggingTodoId: number | null;
-  todoId: number;
-}
-
-const TodoContainer = styled("div")<TodoContainerProps>`
+const TodoContainer = styled("div")<TodoContainerParams>`
   user-select: none;
   padding: 10px;
   margin-bottom: 10px;
@@ -49,7 +34,7 @@ const ListContainer = styled("div")`
   overflow-x: auto;
 `;
 
-const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
+const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
   const [draggingTodoId, setDraggingTodoId] = useState<number | null>(null);
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
@@ -111,8 +96,8 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   const handleDropOnTodo = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: DataValues[],
-    lists: DataValues[],
+    todos: todoParams[],
+    lists: listParams[],
   ) => {
     e.preventDefault();
     if (draggingTodoId) {
@@ -138,8 +123,8 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   const handleDropOnList = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: DataValues[],
-    lists: DataValues[],
+    todos: todoParams[],
+    lists: listParams[],
   ) => {
     // todo
     e.preventDefault();
