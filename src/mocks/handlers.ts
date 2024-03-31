@@ -40,9 +40,9 @@ export const handlers = [
   rest.post<AddTodoList>(
     "http://localhost:3000/todo",
     async (req, res, ctx) => {
-      const { title, listNum } = req.body;
+      const { title, listId } = req.body;
       const id = await db.lists.add({ title });
-      await db.todos.add({ title, listNum, Seq: id });
+      await db.todos.add({ title, listId, Seq: id });
 
       const todos = await db.todos.orderBy("Seq").toArray();
       return res(ctx.status(200), ctx.json({ todos: todos }));
@@ -55,7 +55,7 @@ export const handlers = [
     async (req, res, ctx) => {
       const { title } = req.body;
       const id = await db.lists.add({ title });
-      await db.lists.update(id, { listNum: id, Seq: id });
+      await db.lists.update(id, { listId: id, Seq: id });
 
       const lists = await db.lists.orderBy("Seq").toArray();
       return res(ctx.status(200), ctx.json({ lists }));
@@ -76,7 +76,7 @@ export const handlers = [
         for (let index = 0; index < todos.length; index++) {
           await db.todos.update(todos[index].id, {
             Seq: index,
-            listNum: todos[index].listNum,
+            listId: todos[index].listId,
           });
         }
       }

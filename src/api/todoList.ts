@@ -25,8 +25,8 @@ export const useTodoListInfiniteQuery = () =>
 export const useCreateTodoMutation = () => {
   const queryClient = useQueryClient();
   const AddMutation = useMutation(
-    async ({ title, listNum }: AddTodoParams) => {
-      const response = await axios.post("/todo", { title, listNum });
+    async ({ title, listId }: AddTodoParams) => {
+      const response = await axios.post("/todo", { title, listId });
       return response.data;
     },
     {
@@ -74,7 +74,7 @@ export const useEditTodoListMutation = () => {
         for (let index = 0; index < todos.length; index++) {
           todos[index] = {
             ...todos[index],
-            listNum: todos[index].listNum,
+            listId: todos[index].listId,
             Seq: index,
           };
         }

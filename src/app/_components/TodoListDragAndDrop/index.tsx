@@ -56,7 +56,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
   const addTodoMutation = useCreateTodoMutation();
   const [todoName, setTodoName] = useState("");
   const handleTodoConfirmClick = (id: number) => {
-    addTodoMutation.mutate({ title: todoName, listNum: id });
+    addTodoMutation.mutate({ title: todoName, listId: id });
     setTodoName("");
   };
   const handleOnChangeTodo = (params: string) => {
@@ -108,7 +108,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
         (todo) => todo.id === dragOverTodoId,
       );
       const draggingItemContent = newTodoList[draggingItemIndex];
-      draggingItemContent.listNum = targetList;
+      draggingItemContent.listId = targetList;
       newTodoList.splice(draggingItemIndex, 1);
       newTodoList.splice(dragOverItemIndex, 0, draggingItemContent);
 
@@ -182,7 +182,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
           <div>
             {todoListData.todos &&
               todoListData.todos
-                .filter((todo) => todo.listNum === list.listNum)
+                .filter((todo) => todo.listId === list.listId)
                 .map((todo, _index) => (
                   <TodoContainer
                     key={todo.id}
@@ -212,7 +212,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
                 ))}
             <AddButton
               addData={todoName}
-              handleClickConfirm={() => handleTodoConfirmClick(list.listNum)}
+              handleClickConfirm={() => handleTodoConfirmClick(list.listId)}
               onChange={handleOnChangeTodo}
             >
               + Add Todo
