@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
@@ -7,7 +7,6 @@ import AddButton from "./AddButton";
 import {
   todoParams,
   listParams,
-  TodoListParams,
   DragAndDropParams,
   TodoContainerParams,
 } from "TodoListDragAndDrop";
