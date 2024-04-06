@@ -3,7 +3,7 @@ import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import styled from "@emotion/styled";
-import { AddButtonParams } from "AddButton";
+import { AddButtonParams } from "DataSubmitForm";
 
 const Container = styled("div")`
   display: inline-block,

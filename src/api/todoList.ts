@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
 import { TodoListProps } from "TodoListDragAndDrop";
-import { AddTodoParams } from "AddButton";
+import { AddTodoParams } from "DataSubmitForm";
 
 const TodoListDataAPI = async ({ pageParam = 1 }) => {
   const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);

@@ -30,7 +30,7 @@ declare module "TodoListDragAndDrop" {
   }
 }
 
-declare module "AddButton" {
+declare module "DataSubmitForm" {
   interface AddButtonParams {
     addData: string | number;
     children: string;
