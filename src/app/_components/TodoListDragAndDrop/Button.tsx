@@ -2,12 +2,8 @@
 import React, { useState, FC } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useCreateTodoMutation } from "@/api/todoList";
 import styled from "@emotion/styled";
-
-interface AddTodoProps {
-  listNum: number;
-}
+import { AddButtonParams } from "AddButton";
 
 const Container = styled("div")`
   display: inline-block,
@@ -15,19 +11,22 @@ const Container = styled("div")`
   min-width: 20vw,
 `;
 
-const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
+const AddButton: FC<AddButtonParams> = ({
+  addData,
+  children,
+  handleClickConfirm,
+  onChange,
+}) => {
   const [isAdding, setIsAdding] = useState(false);
-  const [todoName, setTodoName] = useState("");
-  const addTodoMutation = useCreateTodoMutation();
 
   const handleAddClick = () => {
     setIsAdding(true);
   };
+
   // post api 변경
-  const handleConfirmClick = async () => {
-    addTodoMutation.mutate({ title: todoName, listNum: listNum });
+  const handleSubmit = async () => {
+    handleClickConfirm();
     setIsAdding(false);
-    setTodoName("");
   };
 
   const handleCancelClick = () => {
@@ -45,14 +44,14 @@ const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
             borderRadius: "8px",
             marginBottom: "8px",
           }}
-          value={todoName}
-          onChange={(e) => setTodoName(e.target.value)}
+          value={addData}
+          onChange={(e) => onChange(e.target.value)}
         />
         <div>
           <Button
             sx={{ mr: 1, flexShrink: 0 }}
             variant="contained"
-            onClick={handleConfirmClick}
+            onClick={handleSubmit}
           >
             Confirm
           </Button>
@@ -70,9 +69,9 @@ const AddTodo: FC<AddTodoProps> = ({ listNum }) => {
       variant="contained"
       onClick={handleAddClick}
     >
-      + Add Todo
+      {children}
     </Button>
   );
 };
 
-export default AddTodo;
+export default AddButton;

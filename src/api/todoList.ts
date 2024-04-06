@@ -1,55 +1,38 @@
 import axios from "axios";
-import { useMutation, useInfiniteQuery } from "react-query";
-import { useDragStore } from "@/stores/useDragStore";
+import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
+import { TodoListParams } from "TodoListDragAndDrop";
+import { AddTodoParams } from "AddButton";
 
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq?: number;
-}
-
-interface TodoListValue {
-  pageParam: number;
-}
-interface AddTodoProps {
-  title: string;
-  listNum?: number;
-}
-
-interface UpdateTodoListProps {
-  todos: DataValues[];
-  lists: DataValues[];
-}
-
+const TodoListDataAPI = async ({ pageParam = 1 }) => {
+  const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
+  return response.data;
+};
 export const useTodoListInfiniteQuery = () =>
-  useInfiniteQuery(
-    ["page"],
-    async ({ pageParam = 1 }) => {
-      const response = await axios.get(`/todoLists?page=${pageParam}&limit=5`);
-      return response.data;
+  useInfiniteQuery({
+    queryFn: TodoListDataAPI,
+    queryKey: ["infiniteScroll"],
+    staleTime: Infinity,
+    getNextPageParam: (lastPage, allPosts) => {
+      return lastPage.page !== allPosts[0].totalPage
+        ? lastPage.page + 1
+        : undefined;
     },
-    {
-      getNextPageParam: (lastPage, allPosts) => {
-        return lastPage.page !== allPosts[0].totalPage
-          ? lastPage.page + 1
-          : undefined;
-      },
-      enabled: false,
+    onSuccess: (data) => {
+      console.log("data", data);
     },
-  );
+  });
 
 export const useCreateTodoMutation = () => {
-  const { setTodos } = useDragStore();
+  const queryClient = useQueryClient();
   const AddMutation = useMutation(
-    async ({ title, listNum }: AddTodoProps) => {
-      const response = await axios.post("/todo", { title, listNum });
+    async ({ title, listId }: AddTodoParams) => {
+      const response = await axios.post("/todo", { title, listId });
       return response.data;
     },
     {
       onSuccess: (data) => {
         console.log("success", data.todos);
-        setTodos(data.todos);
+        queryClient.invalidateQueries("infiniteScroll");
       },
     },
   );
@@ -57,16 +40,17 @@ export const useCreateTodoMutation = () => {
 };
 
 export const useCreateListMutation = () => {
-  const { setLists } = useDragStore();
+  const queryClient = useQueryClient();
+
   const AddListMutation = useMutation(
-    async ({ title }: AddTodoProps) => {
+    async ({ title }: AddTodoParams) => {
       const response = await axios.post("/list", { title });
       return response.data;
     },
     {
       onSuccess: (data) => {
-        console.log("success", data.lists);
-        setLists(data.lists);
+        console.log("success lists", data.lists);
+        queryClient.invalidateQueries("infiniteScroll");
       },
     },
   );
@@ -74,8 +58,9 @@ export const useCreateListMutation = () => {
 };
 
 export const useEditTodoListMutation = () => {
+  const queryClient = useQueryClient();
   const AddListMutation = useMutation(
-    async ({ todos, lists }: UpdateTodoListProps) => {
+    async ({ todos, lists }: TodoListParams) => {
       if (lists.length) {
         for (let index = 0; index < lists.length; index++) {
           lists[index] = {
@@ -89,6 +74,7 @@ export const useEditTodoListMutation = () => {
         for (let index = 0; index < todos.length; index++) {
           todos[index] = {
             ...todos[index],
+            listId: todos[index].listId,
             Seq: index,
           };
         }
@@ -103,6 +89,7 @@ export const useEditTodoListMutation = () => {
     {
       onSuccess: (data) => {
         console.log("update success", data.lists, data.todos);
+        queryClient.invalidateQueries("infiniteScroll");
       },
     },
   );
