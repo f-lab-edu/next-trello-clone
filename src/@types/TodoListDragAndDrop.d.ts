@@ -14,13 +14,13 @@ declare module "TodoListDragAndDrop" {
     Seq: number;
   }
 
-  interface TodoListParams {
+  interface TodoListProps {
     todos: Todo[];
     lists: List[];
   }
 
   interface DragAndDropParams {
-    todoListData: TodoListParams;
+    todoListData: TodoListProps;
     children?: ReactNode;
   }
 

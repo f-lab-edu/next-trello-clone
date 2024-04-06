@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useMutation, useInfiniteQuery, useQueryClient } from "react-query";
-import { TodoListParams } from "TodoListDragAndDrop";
+import { TodoListProps } from "TodoListDragAndDrop";
 import { AddTodoParams } from "AddButton";
 
 const TodoListDataAPI = async ({ pageParam = 1 }) => {
@@ -60,7 +60,7 @@ export const useCreateListMutation = () => {
 export const useEditTodoListMutation = () => {
   const queryClient = useQueryClient();
   const AddListMutation = useMutation(
-    async ({ todos, lists }: TodoListParams) => {
+    async ({ todos, lists }: TodoListProps) => {
       if (lists.length) {
         for (let index = 0; index < lists.length; index++) {
           lists[index] = {

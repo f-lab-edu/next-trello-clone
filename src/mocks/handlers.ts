@@ -1,7 +1,7 @@
 // import
 import { rest } from "msw"; // msw 1.0v 기준
 import db from "@/db/db.model";
-import { TodoListParams } from "TodoListDragAndDrop";
+import { TodoListProps } from "TodoListDragAndDrop";
 import { AddTodoList } from "AddButton";
 
 export const handlers = [
@@ -62,7 +62,7 @@ export const handlers = [
     },
   ),
 
-  rest.post<TodoListParams>(
+  rest.post<TodoListProps>(
     "http://localhost:3000/todoList",
     async (req, res, ctx) => {
       const { todos, lists } = req.body;
