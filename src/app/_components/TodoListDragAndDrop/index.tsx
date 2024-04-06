@@ -7,7 +7,7 @@ import AddButton from "./Button";
 import {
   Todo,
   List,
-  DragAndDropParams,
+  DragAndDropProps,
   TodoContainerParams,
 } from "TodoListDragAndDrop";
 
@@ -33,7 +33,7 @@ const ListContainer = styled("div")`
   overflow-x: auto;
 `;
 
-const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
+const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
   const [draggingTodoId, setDraggingTodoId] = useState<number | null>(null);
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);

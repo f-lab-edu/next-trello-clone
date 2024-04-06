@@ -19,7 +19,7 @@ declare module "TodoListDragAndDrop" {
     lists: List[];
   }
 
-  interface DragAndDropParams {
+  interface DragAndDropProps {
     todoListData: TodoListProps;
     children?: ReactNode;
   }
