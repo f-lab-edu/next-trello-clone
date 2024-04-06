@@ -17,23 +17,23 @@ const DataSubmitForm: FC<AddButtonParams> = ({
   onConfirm,
   onChange,
 }) => {
-  const [isAdding, setIsAdding] = useState(false);
+  const [openSubmit, setOpenSubmit] = useState(false);
 
   const handleAddClick = () => {
-    setIsAdding(true);
+    setOpenSubmit(true);
   };
 
   // post api 변경
   const handleSubmit = async () => {
     onConfirm();
-    setIsAdding(false);
+    setOpenSubmit(false);
   };
 
   const handleCancelClick = () => {
-    setIsAdding(false);
+    setOpenSubmit(false);
   };
 
-  if (isAdding) {
+  if (openSubmit) {
     return (
       <Container>
         <TextField
