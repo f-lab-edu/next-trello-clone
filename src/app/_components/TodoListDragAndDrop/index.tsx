@@ -211,7 +211,7 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
                   </TodoContainer>
                 ))}
             <DataSubmitForm
-              addData={todoName}
+              data={todoName}
               handleClickConfirm={() => handleTodoConfirmClick(list.listId)}
               onChange={handleOnChangeTodo}
             >
@@ -222,7 +222,7 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
       ))}
       {children}
       <DataSubmitForm
-        addData={listName}
+        data={listName}
         handleClickConfirm={handleListConfirmClick}
         onChange={handleOnChange}
       >

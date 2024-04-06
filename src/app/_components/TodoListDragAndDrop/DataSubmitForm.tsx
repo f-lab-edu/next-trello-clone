@@ -12,7 +12,7 @@ const Container = styled("div")`
 `;
 
 const DataSubmitForm: FC<AddButtonParams> = ({
-  addData,
+  data,
   children,
   handleClickConfirm,
   onChange,
@@ -44,7 +44,7 @@ const DataSubmitForm: FC<AddButtonParams> = ({
             borderRadius: "8px",
             marginBottom: "8px",
           }}
-          value={addData}
+          value={data}
           onChange={(e) => onChange(e.target.value)}
         />
         <div>
