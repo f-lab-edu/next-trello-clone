@@ -24,7 +24,7 @@ declare module "TodoListDragAndDrop" {
     children?: ReactNode;
   }
 
-  interface TodoContainerParams {
+  interface TodoContainerProps {
     draggingTodoId: number | null;
     todoId: number;
   }

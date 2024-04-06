@@ -8,7 +8,7 @@ import {
   Todo,
   List,
   DragAndDropProps,
-  TodoContainerParams,
+  TodoContainerProps,
 } from "TodoListDragAndDrop";
 
 import {
@@ -17,7 +17,7 @@ import {
   useCreateTodoMutation,
 } from "@/api/todoList";
 
-const TodoContainer = styled("div")<TodoContainerParams>`
+const TodoContainer = styled("div")<TodoContainerProps>`
   user-select: none;
   padding: 10px;
   margin-bottom: 10px;
