@@ -65,7 +65,7 @@ export const useEditTodoListMutation = () => {
         for (let index = 0; index < lists.length; index++) {
           lists[index] = {
             ...lists[index],
-            Seq: index,
+            seq: index,
           };
         }
       }
@@ -75,7 +75,7 @@ export const useEditTodoListMutation = () => {
           todos[index] = {
             ...todos[index],
             listId: todos[index].listId,
-            Seq: index,
+            seq: index,
           };
         }
       }

@@ -4,14 +4,14 @@ declare module "TodoListDragAndDrop" {
     id: number;
     title: string;
     listId: number;
-    Seq: number;
+    seq: number;
   }
 
   interface List {
     id: number;
     title: string;
     listId: number;
-    Seq: number;
+    seq: number;
   }
 
   interface TodoListProps {
@@ -41,7 +41,7 @@ declare module "AddButton" {
   interface AddTodoList {
     title: string;
     listId: number;
-    Seq: number;
+    seq: number;
   }
 
   interface AddTodoParams {
