@@ -1,20 +1,20 @@
 // Zustand 기본 사용 구조
 import { create } from "zustand";
-import { Todo, listParams } from "TodoListDragAndDrop";
+import { Todo, List } from "TodoListDragAndDrop";
 
-const initialLists: listParams[] | null = [];
+const initialLists: List[] | null = [];
 const initialTodos: Todo[] | null = [];
 
 // 타입 지정
 interface State {
   todos: Todo[];
-  lists: listParams[];
+  lists: List[];
   backupTodos: Todo[];
-  backupLists: listParams[];
+  backupLists: List[];
   setTodos: (props: Todo[]) => void;
   setLists: (
-    props: listParams[],
-  ) => void | React.Dispatch<React.SetStateAction<listParams[]>>;
+    props: List[],
+  ) => void | React.Dispatch<React.SetStateAction<List[]>>;
   filterTodo: (filterValue: string) => void;
 }
 

@@ -7,7 +7,7 @@ declare module "TodoListDragAndDrop" {
     Seq: number;
   }
 
-  interface listParams {
+  interface List {
     id: number;
     title: string;
     listId: number;
@@ -16,7 +16,7 @@ declare module "TodoListDragAndDrop" {
 
   interface TodoListParams {
     todos: Todo[];
-    lists: listParams[];
+    lists: List[];
   }
 
   interface DragAndDropParams {

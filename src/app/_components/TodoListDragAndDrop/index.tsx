@@ -6,7 +6,7 @@ import styled from "@emotion/styled";
 import AddButton from "./Button";
 import {
   Todo,
-  listParams,
+  List,
   DragAndDropParams,
   TodoContainerParams,
 } from "TodoListDragAndDrop";
@@ -96,7 +96,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
     todos: Todo[],
-    lists: listParams[],
+    lists: List[],
   ) => {
     e.preventDefault();
     if (draggingTodoId) {
@@ -123,7 +123,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
     todos: Todo[],
-    lists: listParams[],
+    lists: List[],
   ) => {
     // todo
     e.preventDefault();
