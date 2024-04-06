@@ -1,9 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import React, { useState, ReactNode } from "react";
+import React, { useState } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import AddButton from "./AddButton";
+import AddButton from "./Button";
+import {
+  todoParams,
+  listParams,
+  DragAndDropParams,
+  TodoContainerParams,
+} from "TodoListDragAndDrop";
 
 import {
   useEditTodoListMutation,
@@ -11,29 +17,7 @@ import {
   useCreateTodoMutation,
 } from "@/api/todoList";
 
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq: number;
-}
-
-interface TodoListDataParams {
-  todos: DataValues[];
-  lists: DataValues[];
-}
-
-interface DragDropValues {
-  todoListData: TodoListDataParams;
-  children?: ReactNode;
-}
-
-interface TodoContainerProps {
-  draggingTodoId: number | null;
-  todoId: number;
-}
-
-const TodoContainer = styled("div")<TodoContainerProps>`
+const TodoContainer = styled("div")<TodoContainerParams>`
   user-select: none;
   padding: 10px;
   margin-bottom: 10px;
@@ -49,7 +33,7 @@ const ListContainer = styled("div")`
   overflow-x: auto;
 `;
 
-const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
+const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
   const [draggingTodoId, setDraggingTodoId] = useState<number | null>(null);
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
@@ -72,7 +56,7 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   const addTodoMutation = useCreateTodoMutation();
   const [todoName, setTodoName] = useState("");
   const handleTodoConfirmClick = (id: number) => {
-    addTodoMutation.mutate({ title: todoName, listNum: id });
+    addTodoMutation.mutate({ title: todoName, listId: id });
     setTodoName("");
   };
   const handleOnChangeTodo = (params: string) => {
@@ -111,8 +95,8 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   const handleDropOnTodo = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: DataValues[],
-    lists: DataValues[],
+    todos: todoParams[],
+    lists: listParams[],
   ) => {
     e.preventDefault();
     if (draggingTodoId) {
@@ -124,7 +108,7 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
         (todo) => todo.id === dragOverTodoId,
       );
       const draggingItemContent = newTodoList[draggingItemIndex];
-      draggingItemContent.listNum = targetList;
+      draggingItemContent.listId = targetList;
       newTodoList.splice(draggingItemIndex, 1);
       newTodoList.splice(dragOverItemIndex, 0, draggingItemContent);
 
@@ -138,8 +122,8 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
   const handleDropOnList = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: DataValues[],
-    lists: DataValues[],
+    todos: todoParams[],
+    lists: listParams[],
   ) => {
     // todo
     e.preventDefault();
@@ -198,7 +182,7 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
           <div>
             {todoListData.todos &&
               todoListData.todos
-                .filter((todo) => todo.listNum === list.listNum)
+                .filter((todo) => todo.listId === list.listId)
                 .map((todo, _index) => (
                   <TodoContainer
                     key={todo.id}
@@ -228,7 +212,7 @@ const DragDrop: React.FC<DragDropValues> = ({ todoListData, children }) => {
                 ))}
             <AddButton
               addData={todoName}
-              handleClickConfirm={() => handleTodoConfirmClick(list.listNum)}
+              handleClickConfirm={() => handleTodoConfirmClick(list.listId)}
               onChange={handleOnChangeTodo}
             >
               + Add Todo

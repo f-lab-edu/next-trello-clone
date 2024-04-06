@@ -4,22 +4,11 @@ import { useEffect, useState } from "react";
 import DragDrop from "@/app/_components/TodoListDragAndDrop";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
 import { useInView } from "react-intersection-observer";
+import { TodoListParams } from "TodoListDragAndDrop";
 
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq: number;
-}
-
-interface TodoList {
-  todos: DataValues[];
-  lists: DataValues[];
-}
 const Home = () => {
-  const [todoList, setTodoList] = useState<TodoList | undefined>();
+  const [todoList, setTodoList] = useState<TodoListParams | undefined>();
   const [ref, inView] = useInView();
-
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useTodoListInfiniteQuery();
 
@@ -47,7 +36,6 @@ const Home = () => {
 
   return (
     <div>
-      {/* 외부 컴포넌트 적용 */}
       {todoList ? (
         <DragDrop todoListData={todoList}>
           <div ref={ref}></div>
@@ -57,5 +45,4 @@ const Home = () => {
   );
 };
 
-// export
 export default Home;
