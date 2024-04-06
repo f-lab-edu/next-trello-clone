@@ -11,7 +11,7 @@ const Container = styled("div")`
   min-width: 20vw,
 `;
 
-const AddButton: FC<AddButtonParams> = ({
+const DataSubmitForm: FC<AddButtonParams> = ({
   addData,
   children,
   handleClickConfirm,
@@ -74,4 +74,4 @@ const AddButton: FC<AddButtonParams> = ({
   );
 };
 
-export default AddButton;
+export default DataSubmitForm;
