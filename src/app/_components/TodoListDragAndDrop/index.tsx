@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
 import AddButton from "./Button";
 import {
-  todoParams,
+  Todo,
   listParams,
   DragAndDropParams,
   TodoContainerParams,
@@ -95,7 +95,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
   const handleDropOnTodo = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: todoParams[],
+    todos: Todo[],
     lists: listParams[],
   ) => {
     e.preventDefault();
@@ -122,7 +122,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
   const handleDropOnList = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: todoParams[],
+    todos: Todo[],
     lists: listParams[],
   ) => {
     // todo

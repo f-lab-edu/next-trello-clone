@@ -1,7 +1,6 @@
 /* src/@types/TodoListDragAndDrop.d.ts */
-
 declare module "TodoListDragAndDrop" {
-  interface todoParams {
+  interface Todo {
     id: number;
     title: string;
     listId: number;
@@ -16,7 +15,7 @@ declare module "TodoListDragAndDrop" {
   }
 
   interface TodoListParams {
-    todos: todoParams[];
+    todos: Todo[];
     lists: listParams[];
   }
 
