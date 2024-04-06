@@ -1,28 +1,20 @@
 // Zustand 기본 사용 구조
 import { create } from "zustand";
+import { todoParams, listParams } from "TodoListDragAndDrop";
 
-interface DataValues {
-  id: number;
-  title: string;
-  listNum: number;
-  Seq?: number;
-}
-
-const initialLists: DataValues[] | null = [];
-const initialTodos: DataValues[] | null = [];
+const initialLists: listParams[] | null = [];
+const initialTodos: todoParams[] | null = [];
 
 // 타입 지정
 interface State {
-  todos: DataValues[];
-  lists: DataValues[];
-  backupTodos: DataValues[];
-  backupLists: DataValues[];
-  setTodos: (props: DataValues[]) => void;
+  todos: todoParams[];
+  lists: listParams[];
+  backupTodos: todoParams[];
+  backupLists: listParams[];
+  setTodos: (props: todoParams[]) => void;
   setLists: (
-    props: DataValues[],
-  ) => void | React.Dispatch<React.SetStateAction<DataValues[]>>;
-  addList: (name: string) => void;
-  addTodo: (title: string, listNum: number) => void;
+    props: listParams[],
+  ) => void | React.Dispatch<React.SetStateAction<listParams[]>>;
   filterTodo: (filterValue: string) => void;
 }
 
@@ -35,33 +27,9 @@ export const useDragStore = create<State>((set) => ({
   setTodos: (props) => set({ todos: props, backupTodos: props }),
   setLists: (props) => set({ lists: props, backupLists: props }),
 
-  addList: (name) =>
-    set((state) => {
-      const newId = state.lists.length ? state.lists.length + 1 : 1;
-      return {
-        lists: [...state.lists, { id: newId, title: name, listNum: newId }],
-        backupLists: [
-          ...state.lists,
-          { id: newId, title: name, listNum: newId },
-        ],
-      };
-    }),
-
-  addTodo: (title, listNum) =>
-    set((state) => {
-      const newId = state.todos.length ? state.todos.length + 1 : 1;
-      return {
-        todos: [...state.todos, { id: newId, title: title, listNum: listNum }],
-        backupTodos: [
-          ...state.todos,
-          { id: newId, title: title, listNum: listNum },
-        ],
-      };
-    }),
-
   filterTodo: (filterValue) =>
     set((state) => {
-      const filteredTodos = state.backupTodos.filter((todo: DataValues) => {
+      const filteredTodos = state.backupTodos.filter((todo: todoParams) => {
         return todo.title.includes(filterValue);
       });
 

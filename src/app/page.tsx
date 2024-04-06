@@ -1,34 +1,30 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DragDrop from "@/app/_components/TodoListDragAndDrop";
-import { useDragStore } from "@/stores/useDragStore";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
-import { useInfiniteQuery } from "react-query";
 import { useInView } from "react-intersection-observer";
+import { TodoListParams } from "TodoListDragAndDrop";
 
 const Home = () => {
-  const { todos, lists, setTodos, setLists } = useDragStore();
+  const [todoList, setTodoList] = useState<TodoListParams | undefined>();
   const [ref, inView] = useInView();
-
-  const { data, fetchNextPage, hasNextPage, isLoading, isError, refetch } =
+  const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useTodoListInfiniteQuery();
 
   useEffect(() => {
     if (inView) {
-      refetch();
       if (hasNextPage) {
         fetchNextPage();
-        if (data) {
-          const allTodos = data.pages.flatMap((page) => page.todos);
-          setTodos(allTodos);
-
-          const allLists = data.pages.flatMap((page) => page.lists);
-          setLists(allLists);
-        }
       }
     }
-  }, [inView, hasNextPage, fetchNextPage]);
+    if (data) {
+      const allTodos = data.pages.flatMap((page) => page.todos);
+      const allLists = data.pages.flatMap((page) => page.lists);
+
+      setTodoList({ todos: allTodos, lists: allLists });
+    }
+  }, [inView, data]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -40,18 +36,13 @@ const Home = () => {
 
   return (
     <div>
-      {/* 외부 컴포넌트 적용 */}
-      <DragDrop
-        todos={todos}
-        lists={lists}
-        setTodos={setTodos}
-        setLists={setLists}
-      >
-        <div ref={ref}></div>
-      </DragDrop>
+      {todoList ? (
+        <DragDrop todoListData={todoList}>
+          <div ref={ref}></div>
+        </DragDrop>
+      ) : null}
     </div>
   );
 };
 
-// export
 export default Home;
