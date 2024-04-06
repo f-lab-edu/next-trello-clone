@@ -34,7 +34,7 @@ declare module "DataSubmitForm" {
   interface AddButtonParams {
     data: string | number;
     children: string;
-    handleClickConfirm: (params?: string) => void;
+    onConfirm: (params?: string) => void;
     onChange: (params: string) => void;
   }
 

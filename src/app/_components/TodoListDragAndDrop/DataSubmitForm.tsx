@@ -14,7 +14,7 @@ const Container = styled("div")`
 const DataSubmitForm: FC<AddButtonParams> = ({
   data,
   children,
-  handleClickConfirm,
+  onConfirm,
   onChange,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
@@ -25,7 +25,7 @@ const DataSubmitForm: FC<AddButtonParams> = ({
 
   // post api 변경
   const handleSubmit = async () => {
-    handleClickConfirm();
+    onConfirm();
     setIsAdding(false);
   };
 
