@@ -39,27 +39,27 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
   const [dragOverListId, setDragOverListId] = useState<number | null>(null);
 
-  const updateTodoList = useEditTodoListMutation();
+  const editTodoList = useEditTodoListMutation();
 
   // list add functions
-  const addListMutation = useCreateListMutation();
+  const createList = useCreateListMutation();
   const [listName, setListName] = useState("");
-  const handleListConfirmClick = () => {
-    addListMutation.mutate({ title: listName });
+  const handleListConfirm = () => {
+    createList.mutate({ title: listName });
     setListName("");
   };
-  const handleOnChange = (params: string) => {
+  const handleChange = (params: string) => {
     setListName(params);
   };
 
   // todo add functions
-  const addTodoMutation = useCreateTodoMutation();
+  const createTodo = useCreateTodoMutation();
   const [todoName, setTodoName] = useState("");
-  const handleTodoConfirmClick = (id: number) => {
-    addTodoMutation.mutate({ title: todoName, listId: id });
+  const handleTodoConfirm = (id: number) => {
+    createTodo.mutate({ title: todoName, listId: id });
     setTodoName("");
   };
-  const handleOnChangeTodo = (params: string) => {
+  const handleTodoChange = (params: string) => {
     setTodoName(params);
   };
 
@@ -115,7 +115,7 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
       setDraggingTodoId(null);
       setDragOverTodoId(null);
 
-      updateTodoList.mutate({ todos: newTodoList, lists: lists });
+      editTodoList.mutate({ todos: newTodoList, lists: lists });
     }
   };
 
@@ -147,7 +147,7 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
       setDraggingListId(null);
       setDragOverListId(null);
 
-      updateTodoList.mutate({ todos: todos, lists: newList });
+      editTodoList.mutate({ todos: todos, lists: newList });
     }
   };
 
@@ -212,8 +212,8 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
                 ))}
             <DataSubmitForm
               data={todoName}
-              handleClickConfirm={() => handleTodoConfirmClick(list.listId)}
-              onChange={handleOnChangeTodo}
+              onConfirm={() => handleTodoConfirm(list.listId)}
+              onChange={handleTodoChange}
             >
               + Add Todo
             </DataSubmitForm>
@@ -223,8 +223,8 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
       {children}
       <DataSubmitForm
         data={listName}
-        handleClickConfirm={handleListConfirmClick}
-        onChange={handleOnChange}
+        onConfirm={handleListConfirm}
+        onChange={handleChange}
       >
         + Add List
       </DataSubmitForm>
