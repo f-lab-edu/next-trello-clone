@@ -1,20 +1,20 @@
 // Zustand 기본 사용 구조
 import { create } from "zustand";
-import { todoParams, listParams } from "TodoListDragAndDrop";
+import { Todo, List } from "TodoListDragAndDrop";
 
-const initialLists: listParams[] | null = [];
-const initialTodos: todoParams[] | null = [];
+const initialLists: List[] | null = [];
+const initialTodos: Todo[] | null = [];
 
 // 타입 지정
 interface State {
-  todos: todoParams[];
-  lists: listParams[];
-  backupTodos: todoParams[];
-  backupLists: listParams[];
-  setTodos: (props: todoParams[]) => void;
+  todos: Todo[];
+  lists: List[];
+  backupTodos: Todo[];
+  backupLists: List[];
+  setTodos: (props: Todo[]) => void;
   setLists: (
-    props: listParams[],
-  ) => void | React.Dispatch<React.SetStateAction<listParams[]>>;
+    props: List[],
+  ) => void | React.Dispatch<React.SetStateAction<List[]>>;
   filterTodo: (filterValue: string) => void;
 }
 
@@ -29,7 +29,7 @@ export const useDragStore = create<State>((set) => ({
 
   filterTodo: (filterValue) =>
     set((state) => {
-      const filteredTodos = state.backupTodos.filter((todo: todoParams) => {
+      const filteredTodos = state.backupTodos.filter((todo: Todo) => {
         return todo.title.includes(filterValue);
       });
 

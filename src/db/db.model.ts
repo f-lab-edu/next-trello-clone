@@ -7,8 +7,8 @@ class MyDatabase extends Dexie {
   constructor() {
     super("MyDatabase");
     this.version(1).stores({
-      lists: "++id,title,listId,Seq",
-      todos: "++id,title,listId,Seq",
+      lists: "++id,title,listId,seq",
+      todos: "++id,title,listId,seq",
     });
 
     this.lists = this.table("lists");
@@ -20,14 +20,14 @@ interface IList {
   id?: number;
   title: string;
   listId?: number;
-  Seq?: number;
+  seq?: number;
 }
 
 interface ITodo {
   id?: number;
   title: string;
   listId?: number;
-  Seq?: number;
+  seq?: number;
 }
 
 const db = new MyDatabase();

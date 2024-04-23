@@ -1,8 +1,8 @@
 // import
 import { rest } from "msw"; // msw 1.0v 기준
 import db from "@/db/db.model";
-import { TodoListParams } from "TodoListDragAndDrop";
-import { AddTodoList } from "AddButton";
+import { TodoListProps } from "TodoListDragAndDrop";
+import { AddTodoList } from "DataSubmitForm";
 
 export const handlers = [
   // mock login
@@ -15,12 +15,12 @@ export const handlers = [
     const page = Number(req.url.searchParams.get("page")) || 1;
     const limit = Number(req.url.searchParams.get("limit")) || 5;
     const todos = await db.todos
-      .orderBy("Seq")
+      .orderBy("seq")
       .offset((page - 1) * limit)
       .limit(limit)
       .toArray();
     const lists = await db.lists
-      .orderBy("Seq")
+      .orderBy("seq")
       .offset((page - 1) * limit)
       .limit(limit)
       .toArray();
@@ -42,9 +42,9 @@ export const handlers = [
     async (req, res, ctx) => {
       const { title, listId } = req.body;
       const id = await db.lists.add({ title });
-      await db.todos.add({ title, listId, Seq: id });
+      await db.todos.add({ title, listId, seq: id });
 
-      const todos = await db.todos.orderBy("Seq").toArray();
+      const todos = await db.todos.orderBy("seq").toArray();
       return res(ctx.status(200), ctx.json({ todos: todos }));
     },
   ),
@@ -55,34 +55,34 @@ export const handlers = [
     async (req, res, ctx) => {
       const { title } = req.body;
       const id = await db.lists.add({ title });
-      await db.lists.update(id, { listId: id, Seq: id });
+      await db.lists.update(id, { listId: id, seq: id });
 
-      const lists = await db.lists.orderBy("Seq").toArray();
+      const lists = await db.lists.orderBy("seq").toArray();
       return res(ctx.status(200), ctx.json({ lists }));
     },
   ),
 
-  rest.post<TodoListParams>(
+  rest.post<TodoListProps>(
     "http://localhost:3000/todoList",
     async (req, res, ctx) => {
       const { todos, lists } = req.body;
       if (lists.length) {
         for (let index = 0; index < lists.length; index++) {
-          await db.lists.update(lists[index].id, { Seq: index });
+          await db.lists.update(lists[index].id, { seq: index });
         }
       }
 
       if (todos.length) {
         for (let index = 0; index < todos.length; index++) {
           await db.todos.update(todos[index].id, {
-            Seq: index,
+            seq: index,
             listId: todos[index].listId,
           });
         }
       }
 
-      const listsUpdate = await db.lists.orderBy("Seq").toArray();
-      const todosUpdate = await db.todos.orderBy("Seq").toArray();
+      const listsUpdate = await db.lists.orderBy("seq").toArray();
+      const todosUpdate = await db.todos.orderBy("seq").toArray();
       return res(
         ctx.status(200),
         ctx.json({ todos: todosUpdate, lists: listsUpdate }),

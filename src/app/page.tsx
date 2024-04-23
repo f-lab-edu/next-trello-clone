@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import DragDrop from "@/app/_components/TodoListDragAndDrop";
 import { useTodoListInfiniteQuery } from "@/api/todoList";
 import { useInView } from "react-intersection-observer";
-import { TodoListParams } from "TodoListDragAndDrop";
+import { TodoListProps } from "TodoListDragAndDrop";
 
 const Home = () => {
-  const [todoList, setTodoList] = useState<TodoListParams | undefined>();
+  const [todoList, setTodoList] = useState<TodoListProps | undefined>();
   const [ref, inView] = useInView();
   const { data, fetchNextPage, hasNextPage, isLoading, isError } =
     useTodoListInfiniteQuery();

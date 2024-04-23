@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import AddButton from "./Button";
+import DataSubmitForm from "./DataSubmitForm";
 import {
-  todoParams,
-  listParams,
-  DragAndDropParams,
-  TodoContainerParams,
+  Todo,
+  List,
+  DragAndDropProps,
+  TodoContainerProps,
 } from "TodoListDragAndDrop";
 
 import {
@@ -17,7 +17,7 @@ import {
   useCreateTodoMutation,
 } from "@/api/todoList";
 
-const TodoContainer = styled("div")<TodoContainerParams>`
+const TodoContainer = styled("div")<TodoContainerProps>`
   user-select: none;
   padding: 10px;
   margin-bottom: 10px;
@@ -33,33 +33,33 @@ const ListContainer = styled("div")`
   overflow-x: auto;
 `;
 
-const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
+const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
   const [draggingTodoId, setDraggingTodoId] = useState<number | null>(null);
   const [dragOverTodoId, setDragOverTodoId] = useState<number | null>(null);
   const [draggingListId, setDraggingListId] = useState<number | null>(null);
   const [dragOverListId, setDragOverListId] = useState<number | null>(null);
 
-  const updateTodoList = useEditTodoListMutation();
+  const editTodoList = useEditTodoListMutation();
 
   // list add functions
-  const addListMutation = useCreateListMutation();
+  const createList = useCreateListMutation();
   const [listName, setListName] = useState("");
-  const handleListConfirmClick = () => {
-    addListMutation.mutate({ title: listName });
+  const handleListConfirm = () => {
+    createList.mutate({ title: listName });
     setListName("");
   };
-  const handleOnChange = (params: string) => {
+  const handleChange = (params: string) => {
     setListName(params);
   };
 
   // todo add functions
-  const addTodoMutation = useCreateTodoMutation();
+  const createTodo = useCreateTodoMutation();
   const [todoName, setTodoName] = useState("");
-  const handleTodoConfirmClick = (id: number) => {
-    addTodoMutation.mutate({ title: todoName, listId: id });
+  const handleTodoConfirm = (id: number) => {
+    createTodo.mutate({ title: todoName, listId: id });
     setTodoName("");
   };
-  const handleOnChangeTodo = (params: string) => {
+  const handleTodoChange = (params: string) => {
     setTodoName(params);
   };
 
@@ -95,8 +95,8 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
   const handleDropOnTodo = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: todoParams[],
-    lists: listParams[],
+    todos: Todo[],
+    lists: List[],
   ) => {
     e.preventDefault();
     if (draggingTodoId) {
@@ -115,15 +115,15 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
       setDraggingTodoId(null);
       setDragOverTodoId(null);
 
-      updateTodoList.mutate({ todos: newTodoList, lists: lists });
+      editTodoList.mutate({ todos: newTodoList, lists: lists });
     }
   };
 
   const handleDropOnList = (
     e: React.DragEvent<HTMLDivElement>,
     targetList: number,
-    todos: todoParams[],
-    lists: listParams[],
+    todos: Todo[],
+    lists: List[],
   ) => {
     // todo
     e.preventDefault();
@@ -147,7 +147,7 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
       setDraggingListId(null);
       setDragOverListId(null);
 
-      updateTodoList.mutate({ todos: todos, lists: newList });
+      editTodoList.mutate({ todos: todos, lists: newList });
     }
   };
 
@@ -210,24 +210,24 @@ const DragDrop: React.FC<DragAndDropParams> = ({ todoListData, children }) => {
                     {todo.title}
                   </TodoContainer>
                 ))}
-            <AddButton
-              addData={todoName}
-              handleClickConfirm={() => handleTodoConfirmClick(list.listId)}
-              onChange={handleOnChangeTodo}
+            <DataSubmitForm
+              data={todoName}
+              onConfirm={() => handleTodoConfirm(list.listId)}
+              onChange={handleTodoChange}
             >
               + Add Todo
-            </AddButton>
+            </DataSubmitForm>
           </div>
         </Card>
       ))}
       {children}
-      <AddButton
-        addData={listName}
-        handleClickConfirm={handleListConfirmClick}
-        onChange={handleOnChange}
+      <DataSubmitForm
+        data={listName}
+        onConfirm={handleListConfirm}
+        onChange={handleChange}
       >
         + Add List
-      </AddButton>
+      </DataSubmitForm>
     </ListContainer>
   );
 };

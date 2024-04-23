@@ -1,48 +1,47 @@
 /* src/@types/TodoListDragAndDrop.d.ts */
-
 declare module "TodoListDragAndDrop" {
-  interface todoParams {
+  interface Todo {
     id: number;
     title: string;
     listId: number;
-    Seq: number;
+    seq: number;
   }
 
-  interface listParams {
+  interface List {
     id: number;
     title: string;
     listId: number;
-    Seq: number;
+    seq: number;
   }
 
-  interface TodoListParams {
-    todos: todoParams[];
-    lists: listParams[];
+  interface TodoListProps {
+    todos: Todo[];
+    lists: List[];
   }
 
-  interface DragAndDropParams {
-    todoListData: TodoListParams;
+  interface DragAndDropProps {
+    todoListData: TodoListProps;
     children?: ReactNode;
   }
 
-  interface TodoContainerParams {
+  interface TodoContainerProps {
     draggingTodoId: number | null;
     todoId: number;
   }
 }
 
-declare module "AddButton" {
+declare module "DataSubmitForm" {
   interface AddButtonParams {
-    addData: string | number;
+    data: string | number;
     children: string;
-    handleClickConfirm: (params?: string) => void;
+    onConfirm: (params?: string) => void;
     onChange: (params: string) => void;
   }
 
   interface AddTodoList {
     title: string;
     listId: number;
-    Seq: number;
+    seq: number;
   }
 
   interface AddTodoParams {
