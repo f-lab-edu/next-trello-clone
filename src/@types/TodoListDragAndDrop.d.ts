@@ -30,9 +30,9 @@ declare module "TodoListDragAndDrop" {
   }
 }
 
-declare module "AddButton" {
+declare module "DataSubmitForm" {
   interface AddButtonParams {
-    addData: string | number;
+    data: string | number;
     children: string;
     handleClickConfirm: (params?: string) => void;
     onChange: (params: string) => void;

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import styled from "@emotion/styled";
-import AddButton from "./Button";
+import DataSubmitForm from "./DataSubmitForm";
 import {
   Todo,
   List,
@@ -210,24 +210,24 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
                     {todo.title}
                   </TodoContainer>
                 ))}
-            <AddButton
-              addData={todoName}
+            <DataSubmitForm
+              data={todoName}
               handleClickConfirm={() => handleTodoConfirmClick(list.listId)}
               onChange={handleOnChangeTodo}
             >
               + Add Todo
-            </AddButton>
+            </DataSubmitForm>
           </div>
         </Card>
       ))}
       {children}
-      <AddButton
-        addData={listName}
+      <DataSubmitForm
+        data={listName}
         handleClickConfirm={handleListConfirmClick}
         onChange={handleOnChange}
       >
         + Add List
-      </AddButton>
+      </DataSubmitForm>
     </ListContainer>
   );
 };
