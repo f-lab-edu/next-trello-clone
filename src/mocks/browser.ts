@@ -1,4 +1,4 @@
-import { setupWorker } from "msw";
-import { handlers, todoHandlers } from "./handlers";
+// import { setupWorker } from "msw";
+// import { handlers, todoHandlers, addTodo } from "./handlers";
 
-export const worker = setupWorker(...handlers, ...todoHandlers);
+// export const worker = setupWorker(...handlers, ...todoHandlers, ...addTodo);
