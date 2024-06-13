@@ -183,7 +183,7 @@ const DragDrop: React.FC<DragAndDropProps> = ({ todoListData, children }) => {
             {todoListData.todos &&
               todoListData.todos
                 .filter((todo) => todo.listId === list.listId)
-                .map((todo, _index) => (
+                .map((todo) => (
                   <TodoContainer
                     key={todo.id}
                     draggable
